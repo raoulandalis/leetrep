@@ -1,0 +1,359 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-11T23:29:00.000Z",
+  "title": "Design System: LeetRep",
+  "extensions": {
+    "colorMeta": {
+      "asphalt": {
+        "role": "neutral",
+        "displayName": "Asphalt Charcoal",
+        "canonical": "#0f1720",
+        "tonalRamp": [
+          "oklch(15% 0.012 252)",
+          "oklch(25% 0.022 252)",
+          "oklch(35% 0.022 252)",
+          "oklch(45% 0.022 252)",
+          "oklch(55% 0.022 252)",
+          "oklch(65% 0.022 252)",
+          "oklch(80% 0.022 252)",
+          "oklch(95% 0.012 252)"
+        ]
+      },
+      "rail": {
+        "role": "neutral",
+        "displayName": "Rail Off-White",
+        "canonical": "#f4f1ec",
+        "tonalRamp": [
+          "oklch(15% 0.004 81)",
+          "oklch(25% 0.007 81)",
+          "oklch(35% 0.007 81)",
+          "oklch(45% 0.007 81)",
+          "oklch(55% 0.007 81)",
+          "oklch(65% 0.007 81)",
+          "oklch(80% 0.007 81)",
+          "oklch(95% 0.004 81)"
+        ]
+      },
+      "lane": {
+        "role": "primary",
+        "displayName": "Lane Emerald",
+        "canonical": "#36d9a0",
+        "tonalRamp": [
+          "oklch(15% 0.118 125)",
+          "oklch(25% 0.215 125)",
+          "oklch(35% 0.215 125)",
+          "oklch(45% 0.215 125)",
+          "oklch(55% 0.215 125)",
+          "oklch(65% 0.215 125)",
+          "oklch(80% 0.215 125)",
+          "oklch(95% 0.118 125)"
+        ]
+      },
+      "signal": {
+        "role": "secondary",
+        "displayName": "Signal Orange",
+        "canonical": "#ff5a1f",
+        "tonalRamp": [
+          "oklch(15% 0.116 38)",
+          "oklch(25% 0.211 38)",
+          "oklch(35% 0.211 38)",
+          "oklch(45% 0.211 38)",
+          "oklch(55% 0.211 38)",
+          "oklch(65% 0.211 38)",
+          "oklch(80% 0.211 38)",
+          "oklch(95% 0.116 38)"
+        ]
+      },
+      "cobalt": {
+        "role": "tertiary",
+        "displayName": "Cobalt Lane",
+        "canonical": "#3d7eff",
+        "tonalRamp": [
+          "oklch(15% 0.112 262)",
+          "oklch(25% 0.204 262)",
+          "oklch(35% 0.204 262)",
+          "oklch(45% 0.204 262)",
+          "oklch(55% 0.204 262)",
+          "oklch(65% 0.204 262)",
+          "oklch(80% 0.204 262)",
+          "oklch(95% 0.112 262)"
+        ]
+      },
+      "lane-pit": {
+        "role": "neutral",
+        "displayName": "Lane Pit",
+        "canonical": "#1a2330",
+        "tonalRamp": [
+          "oklch(15% 0.015 258)",
+          "oklch(25% 0.028 258)",
+          "oklch(35% 0.028 258)",
+          "oklch(45% 0.028 258)",
+          "oklch(55% 0.028 258)",
+          "oklch(65% 0.028 258)",
+          "oklch(80% 0.028 258)",
+          "oklch(95% 0.015 258)"
+        ]
+      },
+      "lane-board": {
+        "role": "neutral",
+        "displayName": "Lane Board",
+        "canonical": "#121a24",
+        "tonalRamp": [
+          "oklch(15% 0.013 254)",
+          "oklch(25% 0.023 254)",
+          "oklch(35% 0.023 254)",
+          "oklch(45% 0.023 254)",
+          "oklch(55% 0.023 254)",
+          "oklch(65% 0.023 254)",
+          "oklch(80% 0.023 254)",
+          "oklch(95% 0.013 254)"
+        ]
+      },
+      "steel-seam": {
+        "role": "neutral",
+        "displayName": "Steel Seam",
+        "canonical": "#2a3544",
+        "tonalRamp": [
+          "oklch(15% 0.017 256)",
+          "oklch(25% 0.031 256)",
+          "oklch(35% 0.031 256)",
+          "oklch(45% 0.031 256)",
+          "oklch(55% 0.031 256)",
+          "oklch(65% 0.031 256)",
+          "oklch(80% 0.031 256)",
+          "oklch(95% 0.017 256)"
+        ]
+      },
+      "track-mist": {
+        "role": "neutral",
+        "displayName": "Track Mist",
+        "canonical": "#9aa3ad",
+        "tonalRamp": [
+          "oklch(15% 0.010 251)",
+          "oklch(25% 0.018 251)",
+          "oklch(35% 0.018 251)",
+          "oklch(45% 0.018 251)",
+          "oklch(55% 0.018 251)",
+          "oklch(65% 0.018 251)",
+          "oklch(80% 0.018 251)",
+          "oklch(95% 0.010 251)"
+        ]
+      },
+      "field-input": {
+        "role": "neutral",
+        "displayName": "Field Input",
+        "canonical": "#d9d4cc",
+        "tonalRamp": [
+          "oklch(15% 0.007 80)",
+          "oklch(25% 0.012 80)",
+          "oklch(35% 0.012 80)",
+          "oklch(45% 0.012 80)",
+          "oklch(55% 0.012 80)",
+          "oklch(65% 0.012 80)",
+          "oklch(80% 0.012 80)",
+          "oklch(95% 0.007 80)"
+        ]
+      },
+      "destructive": {
+        "role": "destructive",
+        "displayName": "Destructive",
+        "canonical": "oklch(0.6 0.22 25)",
+        "tonalRamp": [
+          "oklch(15% 0.12 25)",
+          "oklch(25% 0.18 25)",
+          "oklch(35% 0.20 25)",
+          "oklch(45% 0.22 25)",
+          "oklch(55% 0.22 25)",
+          "oklch(65% 0.20 25)",
+          "oklch(80% 0.14 25)",
+          "oklch(95% 0.06 25)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero thesis on the asphalt course; uppercase condensed."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Auth titles and compact board headings."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Loop step names and strip headers."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Supporting sentences in Barlow; not uppercase."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Field labels, chips, meta, and CTA lettering."
+      }
+    },
+    "shadows": [
+      {
+        "name": "marker-lift",
+        "value": "0 4px 12px rgb(0 0 0 / 35%)",
+        "purpose": "Square loop-step markers."
+      },
+      {
+        "name": "strip-settle",
+        "value": "0 12px 40px rgb(0 0 0 / 35%)",
+        "purpose": "Today's Reps demo strip."
+      },
+      {
+        "name": "rail-cast",
+        "value": "-16px 0 40px rgb(0 0 0 / 25%)",
+        "purpose": "Auth rail casting over the course."
+      },
+      {
+        "name": "start-block-cta",
+        "value": "0 10px 24px rgb(15 23 32 / 28%)",
+        "purpose": "Primary emerald submit button."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-landing",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Landing rise and stagger entrances."
+      },
+      {
+        "name": "landing-rise",
+        "value": "700ms cubic-bezier(0.16, 1, 0.3, 1) both",
+        "purpose": "Thesis and reps strip fade/slide up."
+      },
+      {
+        "name": "landing-stagger",
+        "value": "650ms cubic-bezier(0.16, 1, 0.3, 1) both",
+        "purpose": "Loop steps slide in from left; delay 120ms + index×70ms."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Start-Block Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Full-width lime CTA on the rail — sharp, condensed uppercase.",
+      "html": "<button class=\"ds-btn-primary\" type=\"button\">Log in →</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; width: 100%; height: 48px; padding: 0 24px; border: none; border-radius: 0; background: #36d9a0; color: #0f1720; font-family: \"Barlow Condensed\", ui-sans-serif, system-ui, sans-serif; font-size: 1rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; box-shadow: 0 10px 24px rgb(15 23 32 / 28%); cursor: pointer; transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease; } .ds-btn-primary:hover { background: color-mix(in srgb, #36d9a0 90%, transparent); } .ds-btn-primary:active { transform: translateY(1px); } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 10px 24px rgb(15 23 32 / 28%), 0 0 0 3px color-mix(in srgb, #36d9a0 50%, transparent); } .ds-btn-primary:disabled { opacity: 0.5; pointer-events: none; }"
+    },
+    {
+      "name": "Auth Mode Tabs",
+      "kind": "nav",
+      "refersTo": "button-tab-active",
+      "description": "Log in / Sign up switch in a shallow asphalt pit on the rail.",
+      "html": "<div class=\"ds-tabs\" role=\"tablist\" aria-label=\"Account mode\"><button class=\"ds-tab ds-tab-active\" role=\"tab\" aria-selected=\"true\" type=\"button\">Log in</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\" type=\"button\">Sign up</button></div>",
+      "css": ".ds-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border: 1px solid rgb(15 23 32 / 15%); background: rgb(15 23 32 / 5%); } .ds-tab { height: 40px; border: none; border-radius: 0; background: transparent; color: rgb(15 23 32 / 55%); font-family: \"Barlow Condensed\", ui-sans-serif, system-ui, sans-serif; font-size: 0.875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: color 160ms ease, background-color 160ms ease; } .ds-tab:hover { color: #0f1720; } .ds-tab:focus-visible { outline: none; box-shadow: inset 0 0 0 2px color-mix(in srgb, #36d9a0 60%, transparent); } .ds-tab-active { background: #0f1720; color: #f4f1ec; }"
+    },
+    {
+      "name": "Auth Text Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Square white field with asphalt ink and lane focus ring.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Email</span><input class=\"ds-input\" type=\"email\" placeholder=\"you@example.com\" /></label>",
+      "css": ".ds-field { display: flex; flex-direction: column; gap: 8px; width: 100%; } .ds-field-label { font-family: \"Barlow Condensed\", ui-sans-serif, system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgb(15 23 32 / 55%); } .ds-input { height: 44px; width: 100%; padding: 0 12px; border: 1px solid rgb(15 23 32 / 20%); border-radius: 0; background: #ffffff; color: #0f1720; font-family: \"Barlow\", ui-sans-serif, system-ui, sans-serif; font-size: 0.875rem; outline: none; transition: border-color 160ms ease, box-shadow 160ms ease; } .ds-input::placeholder { color: rgb(15 23 32 / 35%); } .ds-input:hover { border-color: rgb(15 23 32 / 35%); } .ds-input:focus-visible { border-color: #0f1720; box-shadow: 0 0 0 2px color-mix(in srgb, #36d9a0 60%, transparent); }"
+    },
+    {
+      "name": "Rep Kind Chip",
+      "kind": "chip",
+      "refersTo": "chip-rep-lane",
+      "description": "Condensed uppercase Recall / Re-solve tag with tinted lane fill.",
+      "html": "<span class=\"ds-chip ds-chip-lane\">Recall</span><span class=\"ds-chip ds-chip-signal\">Re-solve</span><span class=\"ds-chip ds-chip-cobalt\">Recall</span>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 0; font-family: \"Barlow Condensed\", ui-sans-serif, system-ui, sans-serif; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; } .ds-chip-lane { background: rgb(54 217 160 / 15%); color: #36d9a0; } .ds-chip-signal { background: rgb(255 90 31 / 15%); color: #ff5a1f; } .ds-chip-cobalt { background: rgb(61 126 255 / 15%); color: #3d7eff; }"
+    },
+    {
+      "name": "Today's Reps Strip",
+      "kind": "card",
+      "refersTo": "card-reps-strip",
+      "description": "Translucent asphalt demo strip with lane-board rows.",
+      "html": "<aside class=\"ds-reps\" aria-label=\"Example of Today's Reps\"><div class=\"ds-reps-head\"><p class=\"ds-reps-title\">Today's Reps: <span>3</span></p><p class=\"ds-reps-meta\">Synthetic preview</p></div><ul class=\"ds-reps-list\"><li class=\"ds-rep-row\"><span class=\"ds-lane-idx\">L1</span><span class=\"ds-rep-title\">Two Sum</span><span class=\"ds-chip ds-chip-lane\">Recall</span></li></ul></aside>",
+      "css": ".ds-reps { max-width: 28rem; padding: 16px; border: 1px solid rgb(244 241 236 / 20%); background: rgb(15 23 32 / 75%); color: #f4f1ec; box-shadow: 0 12px 40px rgb(0 0 0 / 35%); } .ds-reps-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; } .ds-reps-title { margin: 0; font-family: \"Barlow Condensed\", ui-sans-serif, system-ui, sans-serif; font-size: 0.875rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; } .ds-reps-title span { color: #36d9a0; } .ds-reps-meta { margin: 0; font-size: 0.65rem; letter-spacing: 0.05em; text-transform: uppercase; color: rgb(244 241 236 / 45%); } .ds-reps-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; } .ds-rep-row { display: grid; grid-template-columns: 2rem 1fr auto; align-items: center; gap: 12px; padding: 10px 12px; border: 1px solid rgb(244 241 236 / 10%); background: #121a24; } .ds-lane-idx { font-family: \"Barlow Condensed\", ui-sans-serif, system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; color: #36d9a0; } .ds-rep-title { font-family: \"Barlow\", ui-sans-serif, system-ui, sans-serif; font-size: 0.875rem; font-weight: 500; color: #f4f1ec; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .ds-chip { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 0; font-family: \"Barlow Condensed\", ui-sans-serif, system-ui, sans-serif; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; } .ds-chip-lane { background: rgb(54 217 160 / 15%); color: #36d9a0; }"
+    },
+    {
+      "name": "Auth Rail Surface",
+      "kind": "custom",
+      "refersTo": "surface-rail",
+      "description": "Full-height off-white starting-block rail with steel left bar.",
+      "html": "<section class=\"ds-rail\"><div class=\"ds-rail-steel\" aria-hidden=\"true\"></div><div class=\"ds-rail-inner\"><h2 class=\"ds-rail-title\">Welcome back</h2><p class=\"ds-rail-body\">Pick up today's review queue.</p></div></section>",
+      "css": ".ds-rail { position: relative; display: flex; min-height: 320px; background: #f4f1ec; color: #0f1720; box-shadow: -16px 0 40px rgb(0 0 0 / 25%); } .ds-rail-steel { position: absolute; inset: 0 auto 0 0; width: 8px; background: linear-gradient(90deg, #2a3038 0%, #8a9098 35%, #1a1f26 100%); } .ds-rail-inner { display: flex; flex-direction: column; justify-content: center; gap: 8px; width: 100%; max-width: 24rem; margin: 0 auto; padding: 40px 48px; } .ds-rail-title { margin: 0; font-family: \"Barlow Condensed\", ui-sans-serif, system-ui, sans-serif; font-size: 1.875rem; font-weight: 800; letter-spacing: -0.025em; text-transform: uppercase; color: #0f1720; } .ds-rail-body { margin: 0; font-family: \"Barlow\", ui-sans-serif, system-ui, sans-serif; font-size: 0.875rem; line-height: 1.5; color: rgb(15 23 32 / 65%); }"
+    },
+    {
+      "name": "Lane Board Wordmark",
+      "kind": "custom",
+      "description": "Leet (rail upright) + Rep (emerald italic) condensed mark.",
+      "html": "<p class=\"ds-wordmark\"><span class=\"ds-wordmark-leet\">Leet</span><span class=\"ds-wordmark-rep\">Rep</span></p>",
+      "css": ".ds-wordmark { margin: 0; font-family: \"Barlow Condensed\", ui-sans-serif, system-ui, sans-serif; font-size: 2.25rem; font-weight: 800; letter-spacing: -0.025em; line-height: 1; } .ds-wordmark-leet { color: #f4f1ec; font-style: normal; } .ds-wordmark-rep { color: #36d9a0; font-style: italic; }"
+    },
+    {
+      "name": "Loop Step Marker",
+      "kind": "custom",
+      "refersTo": "chip-rep-lane",
+      "description": "Square numbered step block on the lane spine.",
+      "html": "<ol class=\"ds-loop\"><li class=\"ds-loop-item\"><span class=\"ds-marker ds-marker-lane\"><span class=\"ds-marker-n\">01</span></span><div><p class=\"ds-loop-title\">Add</p><p class=\"ds-loop-body\">Log the problem you just solved.</p></div></li></ol>",
+      "css": ".ds-loop { list-style: none; margin: 0; padding: 0; max-width: 32rem; } .ds-loop-item { display: flex; gap: 16px; padding: 12px 0; } .ds-marker { display: flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem; flex-shrink: 0; border-radius: 0; box-shadow: 0 4px 12px rgb(0 0 0 / 35%); font-family: \"Barlow Condensed\", ui-sans-serif, system-ui, sans-serif; font-size: 0.55rem; font-weight: 700; line-height: 1; } .ds-marker-lane { background: #36d9a0; color: #0f1720; } .ds-marker-n { display: block; } .ds-loop-title { margin: 0; font-family: \"Barlow Condensed\", ui-sans-serif, system-ui, sans-serif; font-size: 1.125rem; font-weight: 700; letter-spacing: 0.025em; text-transform: uppercase; color: #f4f1ec; } .ds-loop-body { margin: 2px 0 0; font-family: \"Barlow\", ui-sans-serif, system-ui, sans-serif; font-size: 0.875rem; line-height: 1.375; color: rgb(244 241 236 / 70%); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Staggered Start",
+    "overview": "LeetRep’s visual system is a meet-program board on an asphalt course: charcoal field, off-white starting-block rail, and emerald / orange / cobalt lane accents. Type is condensed and uppercase where the program speaks — headlines, step titles, labels, CTAs — while body copy stays in a readable sans for explanation. Edges stay sharp; steel strips and hard seams do the material work that soft UI chrome usually fakes.\n\nThe palette is high-contrast and athletic without looking like LeetCode: electric emerald is the primary action/signal, orange and cobalt are secondary lane markers, never a purple glow theme or highlighter-yellow neon. Depth comes from photographic asphalt texture, translucent overlays, and a small set of soft drop shadows under program blocks — not floating cards or multi-layer glows.",
+    "keyCharacteristics": [
+      "Asphalt field + rail split; auth lives on the rail",
+      "Lane Board wordmark: `Leet` in rail / white, `Rep` in emerald italic",
+      "Condensed meet-program type for display, titles, labels, CTAs",
+      "Sharp steel edges (`0` radius) on signature surfaces",
+      "Three-lane accent cycle: emerald → orange → cobalt"
+    ],
+    "rules": [
+      {
+        "name": "The Three-Lane Rule",
+        "body": "Emerald, orange, and cobalt rotate as lane markers (steps, chips, chart roles). Do not invent a fourth accent hue for status.",
+        "section": "colors"
+      },
+      {
+        "name": "The Rail Ink Rule",
+        "body": "On asphalt, text is rail (or rail at opacity). On rail, text is asphalt. Lime never becomes body copy color.",
+        "section": "colors"
+      },
+      {
+        "name": "The Lane Board Wordmark Rule",
+        "body": "Product mark is always `Leet` + `Rep`: rail/off-white upright for Leet, emerald italic for Rep, both extrabold condensed. Never recolor, never stack as a logo lockup with a glyph.",
+        "section": "typography"
+      },
+      {
+        "name": "The Program Case Rule",
+        "body": "Display, titles, labels, and primary CTAs speak in uppercase condensed. Body sentences stay sentence case in Barlow.",
+        "section": "typography"
+      },
+      {
+        "name": "The Steel-Not-Float Rule",
+        "body": "Depth is seams, photo texture, and those four shadows. No multi-layer neon glows, glassmorphism stacks, or hard offset “sticker” shadows.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Sharp Start Rule",
+        "body": "Primary CTAs, tabs, inputs, chips, and rep rows are square (`rounded-none`). Soft corners are scaffolding debt, not the world.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "Do keep the Meet Program split: course (asphalt + loop + reps strip) beside a full-height rail for auth.",
+      "Do use Barlow Condensed uppercase for program voice and Barlow for body sentences.",
+      "Do cycle only emerald / orange / cobalt for lane meaning.",
+      "Do keep signature controls sharp (`0` radius) with steel seams."
+    ],
+    "donts": [
+      "Don't mimic LeetCode’s brand colors, logo treatment, or problem-list chrome.",
+      "Don't introduce purple glows, soft pill clusters, or rounded marketing cards on the course.",
+      "Don't replace the Lane Board wordmark with a glyph logo or monochrome lockup.",
+      "Don't put secondary marketing blocks (stats strips, promo chips, schedule calendars) into the first viewport beyond the loop and synthetic Today’s Reps strip."
+    ]
+  }
+}

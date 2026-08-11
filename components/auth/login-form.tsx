@@ -2,11 +2,15 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 type Mode = "signin" | "signup" | "confirm";
+
+const fieldClass =
+  "h-11 w-full border border-asphalt/20 bg-white text-sm text-asphalt outline-none transition-[border-color,box-shadow,transform] placeholder:text-asphalt/35 focus-visible:border-asphalt focus-visible:ring-2 focus-visible:ring-lane/60";
 
 export function LoginForm() {
   const router = useRouter();
@@ -112,18 +116,24 @@ export function LoginForm() {
     return (
       <form
         onSubmit={handleSubmit}
-        className="flex w-full max-w-sm flex-col gap-4"
+        className="mx-auto flex w-full max-w-sm flex-col gap-6"
       >
-        <div className="flex flex-col gap-1 text-center">
-          <h2 className="text-lg font-semibold">Check your email</h2>
-          <p className="text-sm text-muted-foreground">
-            We sent a 6-digit code to <span className="text-foreground">{email}</span>.
-            Stay on this page and enter it below.
+        <div className="flex flex-col gap-2">
+          <h2 className="font-display text-3xl font-extrabold tracking-tight text-asphalt uppercase">
+            Check your email
+          </h2>
+          <p className="text-sm leading-relaxed text-asphalt/65">
+            We sent a 6-digit code to{" "}
+            <span className="font-medium text-asphalt">{email}</span>. Stay on
+            this page and enter it below.
           </p>
         </div>
 
         <div className="flex flex-col gap-2">
-          <label htmlFor="otp" className="text-sm font-medium">
+          <label
+            htmlFor="otp"
+            className="font-display text-xs font-bold tracking-[0.16em] text-asphalt/55 uppercase"
+          >
             Confirmation code
           </label>
           <input
@@ -135,8 +145,10 @@ export function LoginForm() {
             pattern="[0-9]{6}"
             maxLength={6}
             value={otp}
-            onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
-            className="h-9 rounded-lg border border-border bg-background px-3 text-center text-sm tracking-[0.3em] outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+            onChange={(e) =>
+              setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))
+            }
+            className={cn(fieldClass, "text-center tracking-[0.35em]")}
             placeholder="000000"
           />
         </div>
@@ -148,19 +160,24 @@ export function LoginForm() {
         ) : null}
 
         {message ? (
-          <p className="text-sm text-muted-foreground" role="status">
+          <p className="text-sm text-asphalt/60" role="status">
             {message}
           </p>
         ) : null}
 
-        <Button type="submit" disabled={loading || otp.length !== 6} className="w-full" size="lg">
+        <Button
+          type="submit"
+          disabled={loading || otp.length !== 6}
+          className="h-12 w-full rounded-none bg-lane font-display text-base font-extrabold tracking-[0.12em] text-asphalt uppercase shadow-[0_10px_24px_rgb(15_23_32_/_28%)] transition-[transform,box-shadow,background-color] hover:bg-lane/90 active:translate-y-px"
+          size="lg"
+        >
           {loading ? "Verifying..." : "Verify and continue"}
         </Button>
 
-        <div className="flex flex-col items-center gap-2 text-sm text-muted-foreground">
+        <div className="flex flex-col items-start gap-2 text-sm text-asphalt/60">
           <button
             type="button"
-            className="font-medium text-foreground underline-offset-4 hover:underline disabled:opacity-50"
+            className="font-medium text-asphalt underline-offset-4 hover:underline disabled:opacity-50"
             disabled={loading}
             onClick={handleResendCode}
           >
@@ -168,7 +185,7 @@ export function LoginForm() {
           </button>
           <button
             type="button"
-            className="font-medium text-foreground underline-offset-4 hover:underline"
+            className="font-medium text-asphalt underline-offset-4 hover:underline"
             onClick={() => {
               setMode("signup");
               setOtp("");
@@ -184,44 +201,123 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex w-full max-w-sm flex-col gap-4">
-      <div className="flex flex-col gap-2">
-        <label htmlFor="email" className="text-sm font-medium">
-          Email
-        </label>
-        <input
-          id="email"
-          type="email"
-          autoComplete="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="h-9 rounded-lg border border-border bg-background px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-        />
+    <form
+      onSubmit={handleSubmit}
+      className="mx-auto flex w-full max-w-sm flex-col gap-6"
+    >
+      <div
+        role="tablist"
+        aria-label="Account mode"
+        className="grid grid-cols-2 gap-1 border border-asphalt/15 bg-asphalt/5 p-1"
+      >
+        <button
+          type="button"
+          role="tab"
+          aria-selected={mode === "signin"}
+          className={cn(
+            "font-display h-10 text-sm font-bold tracking-[0.08em] uppercase transition-colors",
+            mode === "signin"
+              ? "bg-asphalt text-rail"
+              : "text-asphalt/55 hover:text-asphalt",
+          )}
+          onClick={() => {
+            setMode("signin");
+            setError(null);
+            setMessage(null);
+          }}
+        >
+          Log in
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={mode === "signup"}
+          className={cn(
+            "font-display h-10 text-sm font-bold tracking-[0.08em] uppercase transition-colors",
+            mode === "signup"
+              ? "bg-asphalt text-rail"
+              : "text-asphalt/55 hover:text-asphalt",
+          )}
+          onClick={() => {
+            setMode("signup");
+            setError(null);
+            setMessage(null);
+          }}
+        >
+          Sign up
+        </button>
       </div>
 
       <div className="flex flex-col gap-2">
-        <label htmlFor="password" className="text-sm font-medium">
+        <h2 className="font-display text-3xl font-extrabold tracking-tight text-asphalt uppercase">
+          {mode === "signin" ? "Welcome back" : "Start your reps"}
+        </h2>
+        <p className="text-sm text-asphalt/65">
+          {mode === "signin"
+            ? "Pick up today's review queue."
+            : "Create an account to log problems and schedule recalls."}
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label
+          htmlFor="email"
+          className="font-display text-xs font-bold tracking-[0.16em] text-asphalt/55 uppercase"
+        >
+          Email
+        </label>
+        <div className="relative">
+          <Mail
+            className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-asphalt/40"
+            aria-hidden
+          />
+          <input
+            id="email"
+            type="email"
+            autoComplete="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={cn(fieldClass, "pr-3 pl-10")}
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label
+          htmlFor="password"
+          className="font-display text-xs font-bold tracking-[0.16em] text-asphalt/55 uppercase"
+        >
           Password
         </label>
         <div className="relative">
+          <Lock
+            className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-asphalt/40"
+            aria-hidden
+          />
           <input
             id="password"
             type={showPassword ? "text" : "password"}
-            autoComplete={mode === "signin" ? "current-password" : "new-password"}
+            autoComplete={
+              mode === "signin" ? "current-password" : "new-password"
+            }
             required
             minLength={6}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="h-9 w-full rounded-lg border border-border bg-background py-1 pr-10 pl-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+            className={cn(fieldClass, "pr-11 pl-10")}
           />
           <button
             type="button"
             onClick={() => setShowPassword((visible) => !visible)}
-            className="absolute top-1/2 right-2 flex size-7 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground hover:text-foreground"
+            className="absolute top-1/2 right-2 flex size-8 -translate-y-1/2 items-center justify-center text-asphalt/45 hover:text-asphalt"
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
-            {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+            {showPassword ? (
+              <EyeOff className="size-4" />
+            ) : (
+              <Eye className="size-4" />
+            )}
           </button>
         </div>
       </div>
@@ -233,50 +329,23 @@ export function LoginForm() {
       ) : null}
 
       {message ? (
-        <p className="text-sm text-muted-foreground" role="status">
+        <p className="text-sm text-asphalt/60" role="status">
           {message}
         </p>
       ) : null}
 
-      <Button type="submit" disabled={loading} className="w-full" size="lg">
+      <Button
+        type="submit"
+        disabled={loading}
+        className="h-12 w-full rounded-none bg-lane font-display text-base font-extrabold tracking-[0.12em] text-asphalt uppercase shadow-[0_10px_24px_rgb(15_23_32_/_28%)] transition-[transform,box-shadow,background-color] hover:bg-lane/90 active:translate-y-px"
+        size="lg"
+      >
         {loading
           ? "Please wait..."
           : mode === "signin"
-            ? "Sign in"
-            : "Create account"}
+            ? "Log in →"
+            : "Create account →"}
       </Button>
-
-      {mode === "signin" ? (
-        <p className="text-center text-sm text-muted-foreground">
-          Don&apos;t have an account?{" "}
-          <button
-            type="button"
-            className="font-medium text-foreground underline-offset-4 hover:underline"
-            onClick={() => {
-              setMode("signup");
-              setError(null);
-              setMessage(null);
-            }}
-          >
-            Create account
-          </button>
-        </p>
-      ) : (
-        <p className="text-center text-sm text-muted-foreground">
-          Already have an account?{" "}
-          <button
-            type="button"
-            className="font-medium text-foreground underline-offset-4 hover:underline"
-            onClick={() => {
-              setMode("signin");
-              setError(null);
-              setMessage(null);
-            }}
-          >
-            Sign in
-          </button>
-        </p>
-      )}
     </form>
   );
 }
