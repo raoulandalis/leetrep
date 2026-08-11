@@ -1,30 +1,13 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { LoginForm } from "@/components/auth/login-form";
 
 export default function Home() {
-  const [status, setStatus] = useState("Testing connection...");
-
-  useEffect(() => {
-    const supabase = createClient();
-
-    async function testConnection() {
-      const { error } = await supabase.auth.getSession();
-
-      if (error) {
-        setStatus(`Connection failed: ${error.message}`);
-      } else {
-        setStatus("Supabase connected successfully!");
-      }
-    }
-
-    testConnection();
-  }, []);
-
   return (
-    <main className="flex min-h-screen items-center justify-center">
-      <h1 className="text-2xl font-bold">{status}</h1>
+    <main className="flex min-h-screen flex-col items-center justify-center px-4">
+      <div className="mb-8 flex flex-col items-center gap-2 text-center">
+        <h1 className="text-3xl font-bold tracking-tight">LeetRep</h1>
+        <p className="text-muted-foreground">Remember what you solve.</p>
+      </div>
+      <LoginForm />
     </main>
   );
 }
