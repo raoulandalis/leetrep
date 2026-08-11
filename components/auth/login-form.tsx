@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 
@@ -12,6 +13,7 @@ export function LoginForm() {
   const [mode, setMode] = useState<Mode>("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [otp, setOtp] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -202,16 +204,26 @@ export function LoginForm() {
         <label htmlFor="password" className="text-sm font-medium">
           Password
         </label>
-        <input
-          id="password"
-          type="password"
-          autoComplete={mode === "signin" ? "current-password" : "new-password"}
-          required
-          minLength={6}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="h-9 rounded-lg border border-border bg-background px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-        />
+        <div className="relative">
+          <input
+            id="password"
+            type={showPassword ? "text" : "password"}
+            autoComplete={mode === "signin" ? "current-password" : "new-password"}
+            required
+            minLength={6}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="h-9 w-full rounded-lg border border-border bg-background py-1 pr-10 pl-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((visible) => !visible)}
+            className="absolute top-1/2 right-2 flex size-7 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground hover:text-foreground"
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+          </button>
+        </div>
       </div>
 
       {error ? (
