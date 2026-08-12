@@ -28,11 +28,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col font-sans">
         {/*
-          THESIS: Solving once is not learning — today's reps line up like lanes; sign in is the starting block.
-          OWN-WORLD: Staggered Start — asphalt charcoal, off-white rail, emerald/orange/cobalt lane accents, condensed meet-program type, sharp steel edges.
-          STORY: Visitor sees the V1 loop and a synthetic Today's Reps strip, believes retention needs return, signs in or creates an account.
-          FIRST VIEWPORT: Meet Program split — left course map + reps demo; right full-height auth rail; Lane Board wordmark (Leet white / Rep lime italic).
-          FORM: Staggered Start (grounded #7), seed 5c626fe9; composition Meet Program + A wordmark.
+          THESIS: Solving once is not learning — journal the insight, return for today's reps; sign in to start.
+          OWN-WORLD: Journal Board — quiet charcoal field with soft depth (no ruled lines), off-white clipboard rail, emerald/orange/cobalt accents, condensed program type, sharp edges.
+          STORY: Visitor sees the V1 loop as stamped entries beside a framed synthetic dashboard preview, believes retention needs return, signs in or creates an account.
+          FIRST VIEWPORT: Meet Program split — left thesis + steps|dashboard preview; right full-height auth rail; wordmark Leet white / Rep emerald italic.
+          FORM: Journal Board polish on Meet Program split; seed 5c626fe9 lineage retained for palette/layout only.
           FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
         */}
         {children}

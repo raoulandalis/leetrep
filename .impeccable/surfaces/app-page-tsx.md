@@ -14,23 +14,20 @@ Persuade. Route: `/` (`app/page.tsx` + `components/auth/login-form.tsx`). Get th
 Developers arriving to start or continue spaced LeetCode retention. Believe: solving once is not learning; the loop brings problems back.
 
 ## Direction
-Staggered Start world. Approved composition: Meet Program (comp-b) with Lane Board wordmark (Leet white / Rep lime, italic condensed). Seed key 5c626fe9. Form: Staggered Start / candidate 7.
+Journal Board metaphor on the Meet Program split. Quiet charcoal field with soft depth (no ruled lines); clipboard auth rail right. Wordmark Leet white / Rep emerald italic. Palette retained (emerald/orange/cobalt). Straight vertical stamped steps with Today's Reps demo panel to the right on desktop (stacks on mobile). No track/asphalt/lane-paint/starting-block cues.
 
 ## Must keep
 - Email/password sign-in, create account, same-page OTP
 - V1 loop only: Add → Journal → Recall → Re-solve → Schedule
-- Synthetic Today's Reps demo (labeled synthetic)
+- Synthetic Today's Reps as a framed dashboard/browser preview beside the steps (desktop); stacks below on mobile. Caption: “Dashboard preview · synthetic”.
 - No LeetCode look; sleek + popping emerald/orange/cobalt
+- Split layout; condensed type; sharp edges
 
-## Must not ship from comps
+## Must not ship
+- Diagonal track stripe / asphalt photos / steel starting-block edge
+- Race-lane L1/L2 labeling
 - Invented TRAIN/REP/COMPETE copy
-- Prepare/Practice/Perform steps
-- Google/GitHub buttons, forgot password, remember me (not in V1 auth)
-- Race-bib / EST plate mark (replaced by A wordmark)
-- Photoreal starting-block hero as proof
+- Google/GitHub, forgot password, remember me (not in V1 auth)
 
 ## Memorable moment
-Vertical meet-program course map of the real loop + compact Today's Reps strip beside a full-height starting-block auth rail.
-
-## Approved comp
-`.impeccable/mocks/comp-b-meet-program.png` (+ logo from `.impeccable/mocks/comp-a-lane-board.png`)
+Straight vertical stamped loop + framed dashboard preview of Today's Reps beside the steps.

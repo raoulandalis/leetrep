@@ -55,7 +55,7 @@
 }
 
 :root {
-  /* Staggered Start */
+  /* Journal Board — desk/notebook field + clipboard rail */
   --asphalt: #0f1720;
   --rail: #f4f1ec;
   --lane: #36d9a0;
@@ -111,6 +111,15 @@
 @layer utilities {
   .font-display {
     font-family: var(--font-display);
+  }
+
+  /* Quiet charcoal field — soft depth only, no ruled/grid wallpaper */
+  .journal-field {
+    background-color: var(--asphalt);
+    background-image:
+      radial-gradient(ellipse 80% 55% at 12% 8%, rgb(54 217 160 / 0.1), transparent 55%),
+      radial-gradient(ellipse 70% 50% at 85% 90%, rgb(15 23 32 / 0.95), transparent 60%),
+      radial-gradient(ellipse 100% 80% at 50% 40%, transparent 35%, rgb(15 23 32 / 0.55) 100%);
   }
 }
 

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import {
   BookOpen,
   Brain,
@@ -72,31 +71,8 @@ function Wordmark() {
 export default function Home() {
   return (
     <main className="relative min-h-screen overflow-hidden lg:grid lg:grid-cols-[minmax(0,1.15fr)_minmax(22rem,0.85fr)]">
-      <section className="relative flex flex-col justify-between gap-10 px-6 py-8 sm:px-10 sm:py-10 lg:px-14 lg:py-12">
-        <Image
-          src="/landing/asphalt-field.png"
-          alt=""
-          fill
-          priority
-          sizes="(min-width: 1024px) 60vw, 100vw"
-          className="pointer-events-none object-cover"
-        />
-        <Image
-          src="/landing/lane-diagonal.png"
-          alt=""
-          fill
-          sizes="(min-width: 1024px) 60vw, 100vw"
-          className="pointer-events-none object-cover opacity-90 mix-blend-screen"
-        />
-        <div className="pointer-events-none absolute inset-0 bg-asphalt/35" />
-
-        <Image
-          src="/landing/steel-edge.png"
-          alt=""
-          width={48}
-          height={1200}
-          className="pointer-events-none absolute top-0 right-0 h-full w-2.5 object-cover sm:w-3"
-        />
+      <section className="journal-field relative flex flex-col px-6 py-8 sm:px-10 sm:py-10 lg:px-14 lg:py-12">
+        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-px bg-rail/15 lg:block" />
 
         <div className="relative z-10 flex flex-col gap-10">
           <Wordmark />
@@ -113,80 +89,104 @@ export default function Home() {
             </p>
           </div>
 
-          <ol className="relative max-w-lg space-y-0">
-            <div
-              aria-hidden
-              className="absolute top-4 bottom-4 left-[1.35rem] w-px bg-lane/50"
-            />
-            {LOOP.map((step, index) => (
-              <li
-                key={step.n}
-                className="landing-stagger relative flex gap-4 py-3 pl-1"
-                style={{ animationDelay: `${120 + index * 70}ms` }}
-              >
-                <span
-                  className={`relative z-10 flex size-11 shrink-0 flex-col items-center justify-center gap-0.5 shadow-[0_4px_12px_rgb(0_0_0_/_35%)] ${step.accent}`}
+          <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(14rem,0.85fr)] lg:gap-10">
+            <ol className="relative min-w-0">
+              {LOOP.map((step, index) => (
+                <li
+                  key={step.n}
+                  className="landing-stagger relative flex gap-4 border-b border-rail/10 py-3.5 last:border-b-0"
+                  style={{ animationDelay: `${120 + index * 70}ms` }}
                 >
-                  <step.Icon className="size-3.5" strokeWidth={2.5} aria-hidden />
-                  <span className="font-display text-[0.55rem] leading-none font-bold">
-                    {step.n}
+                  <span
+                    className={`relative z-10 flex size-10 shrink-0 items-center justify-center ${step.accent}`}
+                    aria-hidden
+                  >
+                    <step.Icon className="size-4" strokeWidth={2.25} />
                   </span>
-                </span>
-                <div className="min-w-0 pt-1">
-                  <p className="font-display text-lg font-bold tracking-wide text-rail uppercase">
-                    {step.title}
-                  </p>
-                  <p className="mt-0.5 text-sm leading-snug text-rail/70">
-                    {step.body}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </div>
+                  <div className="min-w-0 flex-1 pt-0.5">
+                    <div className="flex items-baseline gap-2">
+                      <span className="font-display text-xs font-bold tracking-[0.14em] text-rail/40">
+                        {step.n}
+                      </span>
+                      <p className="font-display text-lg font-bold tracking-wide text-rail uppercase">
+                        {step.title}
+                      </p>
+                    </div>
+                    <p className="mt-0.5 text-sm leading-snug text-rail/70">
+                      {step.body}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ol>
 
-        <aside
-          className="landing-rise relative z-10 max-w-md border border-rail/20 bg-asphalt/75 p-4 shadow-[0_12px_40px_rgb(0_0_0_/_35%)]"
-          style={{ animationDelay: "420ms" }}
-          aria-label="Example of Today's Reps"
-        >
-          <div className="mb-3 flex items-baseline justify-between gap-3">
-            <p className="font-display text-sm font-bold tracking-[0.14em] text-rail uppercase">
-              Today&apos;s Reps:{" "}
-              <span className="text-lane">{DEMO_REPS.length}</span>
-            </p>
-            <p className="text-[0.65rem] tracking-wide text-rail/45 uppercase">
-              Synthetic preview
-            </p>
+            <aside
+              className="landing-rise lg:sticky lg:top-10"
+              style={{ animationDelay: "280ms" }}
+              aria-label="Dashboard preview, synthetic"
+            >
+              <p className="font-display mb-2 text-xs font-bold tracking-[0.14em] text-rail/50 uppercase">
+                Dashboard preview · synthetic
+              </p>
+              <div className="relative">
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute -inset-8 -z-10 bg-lane/20 blur-3xl"
+                />
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-4 -z-10 bg-rail/10 blur-2xl"
+                />
+                <div className="relative overflow-hidden border border-rail/20 bg-[#0b1017] shadow-[0_16px_40px_rgb(15_23_32_/_45%)] lg:origin-top lg:rotate-1">
+                  <div
+                    className="flex items-center gap-2 border-b border-rail/10 bg-[#151b24] px-3 py-2"
+                    aria-hidden
+                  >
+                    <span className="size-2.5 rounded-full bg-signal/80" />
+                    <span className="size-2.5 rounded-full bg-lane/70" />
+                    <span className="size-2.5 rounded-full bg-cobalt/80" />
+                    <div className="ml-2 flex min-w-0 flex-1 items-center bg-asphalt/80 px-2 py-1">
+                      <span className="truncate text-xs text-rail/45">
+                        leetrep.app/dashboard
+                      </span>
+                    </div>
+                  </div>
+                  <div className="bg-[#121a24] p-4">
+                    <div className="mb-3 flex items-baseline justify-between gap-3 border-b border-rail/10 pb-3">
+                      <p className="font-display text-sm font-bold tracking-[0.14em] text-rail uppercase">
+                        Today&apos;s Reps:{" "}
+                        <span className="text-lane">{DEMO_REPS.length}</span>
+                      </p>
+                      <p className="text-xs tracking-wide text-rail/40 uppercase">
+                        Demo data
+                      </p>
+                    </div>
+                    <ul>
+                      {DEMO_REPS.map((rep) => (
+                        <li
+                          key={rep.title}
+                          className="flex items-center justify-between gap-3 border-b border-rail/10 py-2.5 last:border-b-0"
+                        >
+                          <span className="min-w-0 truncate text-sm font-medium text-rail">
+                            {rep.title}
+                          </span>
+                          <span
+                            className={`font-display shrink-0 px-2 py-0.5 text-xs font-bold tracking-wider uppercase ${rep.tone}`}
+                          >
+                            {rep.kind}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </aside>
           </div>
-          <ul className="space-y-2">
-            {DEMO_REPS.map((rep, i) => (
-              <li
-                key={rep.title}
-                className="grid grid-cols-[2rem_1fr_auto] items-center gap-3 border border-rail/10 bg-[#121a24] px-3 py-2.5"
-              >
-                <span className="font-display text-xs font-bold text-lane">
-                  L{i + 1}
-                </span>
-                <span className="min-w-0 truncate text-sm font-medium text-rail">
-                  {rep.title}
-                </span>
-                <span
-                  className={`font-display px-2 py-0.5 text-[0.65rem] font-bold tracking-wider uppercase ${rep.tone}`}
-                >
-                  {rep.kind}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </aside>
+        </div>
       </section>
 
-      <section className="relative flex items-stretch bg-rail text-asphalt shadow-[-16px_0_40px_rgb(0_0_0_/_25%)] lg:min-h-screen">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-y-0 left-0 w-2 bg-[linear-gradient(90deg,#2a3038_0%,#8a9098_35%,#1a1f26_100%)]"
-        />
+      <section className="relative flex items-stretch border-t border-asphalt/10 bg-rail text-asphalt lg:min-h-screen lg:border-t-0 lg:border-l lg:border-asphalt/10">
         <div className="flex w-full flex-col justify-center px-6 py-10 sm:px-10 lg:px-12">
           <LoginForm />
         </div>

@@ -1,6 +1,6 @@
 ---
 name: LeetRep
-description: Staggered Start — asphalt course, off-white rail, lane-signal accents, meet-program type.
+description: Journal Board — desk/notebook field, off-white clipboard rail, emerald accents.
 colors:
   asphalt: "#0f1720"
   rail: "#f4f1ec"
@@ -119,25 +119,27 @@ components:
 
 ## Overview
 
-**Creative North Star: "Staggered Start"**
+**Creative North Star: "Journal Board"**
 
-LeetRep’s visual system is a meet-program board on an asphalt course: charcoal field, off-white starting-block rail, and emerald / orange / cobalt lane accents. Type is condensed and uppercase where the program speaks — headlines, step titles, labels, CTAs — while body copy stays in a readable sans for explanation. Edges stay sharp; steel strips and hard seams do the material work that soft UI chrome usually fakes.
+LeetRep’s visual system is a study desk / journal board beside a clipboard rail: quiet charcoal field with soft depth (no ruled/grid wallpaper), off-white auth panel, and emerald / orange / cobalt accents. Type is condensed and uppercase where the program speaks — headlines, step titles, labels, CTAs — while body copy stays in a readable sans for explanation. Edges stay sharp; hairline seams do the structure work — no track paint, asphalt photos, or starting-block chrome.
 
-The palette is high-contrast and athletic without looking like LeetCode: electric emerald is the primary action/signal, orange and cobalt are secondary lane markers, never a purple glow theme or highlighter-yellow neon. Depth comes from photographic asphalt texture, translucent overlays, and a small set of soft drop shadows under program blocks — not floating cards or multi-layer glows.
+The palette is high-contrast and sleek without looking like LeetCode: electric emerald is the primary action/signal, orange and cobalt are secondary markers, never a purple glow theme or highlighter-yellow neon. Depth comes from tonal layering and light borders — not floating cards or multi-layer glows.
 
 **Key Characteristics:**
-- Asphalt field + rail split; auth lives on the rail
-- Lane Board wordmark: `Leet` in rail / white, `Rep` in emerald italic
-- Condensed meet-program type for display, titles, labels, CTAs
-- Sharp steel edges (`0` radius) on signature surfaces
-- Three-lane accent cycle: emerald → orange → cobalt
+- Notebook field + clipboard rail split; auth lives on the rail
+- Quiet charcoal depth only — no ruled lines or grid wallpaper
+- Wordmark: `Leet` in rail / white, `Rep` in emerald italic
+- Condensed program type for display, titles, labels, CTAs
+- Sharp edges (`0` radius) on signature surfaces
+- Three-accent cycle: emerald → orange → cobalt
+- Loop steps as a straight vertical stamped list; Today's Reps shown as a framed browser/dashboard screenshot preview (labeled synthetic) beside the steps on desktop
 
 ## Colors
 
-Athletic charcoal course with an off-white rail and three lane signals; accents stay rare and coded to meaning.
+Athletic charcoal notebook field with an off-white clipboard rail and three accent signals; accents stay rare and coded to meaning.
 
 ### Primary
-- **Lane Emerald** (`{colors.lane}`): Primary action, ring, wordmark “Rep,” display emphasis, and lane-index numerals. Ink on emerald is asphalt.
+- **Lane Emerald** (`{colors.lane}`): Primary action, ring, wordmark “Rep,” display emphasis, and checklist accents. Ink on emerald is asphalt.
 
 ### Secondary
 - **Signal Orange** (`{colors.signal}`): Alternating loop-step fill and Re-solve chip accent. White ink on solid fills.
@@ -146,12 +148,12 @@ Athletic charcoal course with an off-white rail and three lane signals; accents 
 - **Cobalt Lane** (`{colors.cobalt}`): Third lane accent for Recall/step variety; white ink on solid fills.
 
 ### Neutral
-- **Asphalt Charcoal** (`{colors.asphalt}`): Course background, dark text on rail, active tab fill.
-- **Rail Off-White** (`{colors.rail}`): Auth column, light text on asphalt, wordmark “Leet.”
-- **Lane Pit** (`{colors.lane-pit}`): Raised mute / secondary surface on asphalt.
-- **Lane Board** (`{colors.lane-board}`): Rep row wells inside the Today’s Reps strip.
+- **Asphalt Charcoal** (`{colors.asphalt}`): Desk/notebook field background, dark text on rail, active tab fill.
+- **Rail Off-White** (`{colors.rail}`): Auth clipboard column, light text on field, wordmark “Leet.”
+- **Lane Pit** (`{colors.lane-pit}`): Raised mute / secondary surface on the field.
+- **Lane Board** (`{colors.lane-board}`): Checklist well behind Today's Reps.
 - **Steel Seam** (`{colors.steel-seam}`): Borders and structural seams on dark surfaces.
-- **Track Mist** (`{colors.track-mist}`): Muted foreground / tertiary labels on asphalt.
+- **Track Mist** (`{colors.track-mist}`): Muted foreground / tertiary labels on the field.
 - **Field Input** (`{colors.field-input}`): Token for form field borders/inputs in the theme map.
 - **Destructive** (`{colors.destructive}`): Form error text only.
 
@@ -168,10 +170,10 @@ Athletic charcoal course with an off-white rail and three lane signals; accents 
 **Character:** Meet-program condensed for the board voice — tight tracking, extrabold, often uppercase — paired with a straight athletic sans for sentences.
 
 ### Hierarchy
-- **Display** (800, `clamp(2.5rem, 7vw, 4.75rem)`, line-height `0.92`, uppercase): Hero thesis on the course map.
+- **Display** (800, `clamp(2.5rem, 7vw, 4.75rem)`, line-height `0.92`, uppercase): Hero thesis on the journal field.
 - **Headline** (800, `1.875rem` / `text-3xl`, tight tracking, uppercase): Auth titles and compact board headings.
-- **Title** (700, `1.125rem`, wide tracking, uppercase): Loop step names and strip headers.
-- **Body** (400, `1rem`–`1.125rem`, relaxed): Supporting sentences; keep ~`max-w-md` / ~`max-w-xl` on the course.
+- **Title** (700, `1.125rem`, wide tracking, uppercase): Loop step names and checklist headers.
+- **Body** (400, `1rem`–`1.125rem`, relaxed): Supporting sentences; keep ~`max-w-md` / ~`max-w-xl` on the field.
 - **Label** (700, `0.75rem`, `0.16em` tracking, uppercase): Field labels, chips, meta tags, CTA lettering (CTA bumps size to `1rem` with `0.12em` tracking).
 
 ### Named Rules
@@ -181,46 +183,42 @@ Athletic charcoal course with an off-white rail and three lane signals; accents 
 
 ## Layout
 
-Desktop is a Meet Program split: course column ~`1.15fr` with full-bleed asphalt imagery, steel edge on the right of the course; auth rail ~`0.85fr` with `min` width ~`22rem`, full viewport height. Course padding steps `24px` → `40px` → `56px` horizontally and `32px` → `40px` → `48px` vertically. Vertical rhythm inside the course stacks wordmark → thesis → loop → Today’s Reps with `40px` gaps. Auth form centers in the rail at `max-w-sm` with `24px` field stack gaps. Below `lg`, columns stack: course then rail.
+Desktop is a Meet Program split: journal column ~`1.15fr` with ruled notebook field; auth clipboard rail ~`0.85fr` with `min` width ~`22rem`, full viewport height. Field padding steps `24px` → `40px` → `56px` horizontally and `32px` → `40px` → `48px` vertically. Vertical rhythm stacks wordmark → thesis → stamped loop → Today’s Reps checklist with `40px` gaps. Auth form centers in the rail at `max-w-sm` with `24px` field stack gaps. Below `lg`, columns stack: journal then rail.
 
 ## Elevation & Depth
 
-Tonal layering first (photo asphalt, `asphalt/35` veil, translucent strip `asphalt/75`), with a short soft-shadow vocabulary for program blocks and the rail’s left cast — not card stacks.
+Tonal layering first (ruled notebook field, checklist well `#121a24`), with light hairline borders — not card stacks, steel strips, or photo asphalt.
 
 ### Shadow Vocabulary
-- **Marker lift** (`box-shadow: 0 4px 12px rgb(0 0 0 / 35%)`): Square loop-step markers.
-- **Strip settle** (`box-shadow: 0 12px 40px rgb(0 0 0 / 35%)`): Today’s Reps demo strip.
-- **Rail cast** (`box-shadow: -16px 0 40px rgb(0 0 0 / 25%)`): Auth rail over the course.
+- **Strip settle** (optional soft shadow on checklist): restrained; prefer borders over lift.
 - **Start-block CTA** (`box-shadow: 0 10px 24px rgb(15 23 32 / 28%)`): Primary emerald submit.
 
 ### Named Rules
-**The Steel-Not-Float Rule.** Depth is seams, photo texture, and those four shadows. No multi-layer neon glows, glassmorphism stacks, or hard offset “sticker” shadows.
+**The Steel-Not-Float Rule.** Depth is seams and tonal wells. No multi-layer neon glows, glassmorphism stacks, hard offset sticker shadows, or track/asphalt chrome.
 
 ## Shapes
 
-Form language is sharp steel: signature controls and board chrome use `0` radius. Base theme `--radius` (`0.35rem`) remains for generic shadcn shells not yet restyled — do not let soft radii define new brand surfaces. Borders are hairline seams (`1px` steel/rail at low opacity). Recurring silhouettes: square `2.75rem` step markers, `2px`–`3px` steel edge strip, `8px` steel gradient bar on the rail’s left.
+Form language is sharp: signature controls use `0` radius. Base theme `--radius` (`0.35rem`) remains for generic shadcn shells not yet restyled. Borders are hairline seams. Recurring silhouettes: square ~`2.5rem` stamp markers, empty checkbox ticks on the due list, dashed checklist dividers.
 
 ### Named Rules
-**The Sharp Start Rule.** Primary CTAs, tabs, inputs, chips, and rep rows are square (`rounded-none`). Soft corners are scaffolding debt, not the world.
+**The Sharp Start Rule.** Primary CTAs, tabs, inputs, chips, and checklist rows are square (`rounded-none`). Soft corners are scaffolding debt, not the world.
 
 ## Components
 
 ### Buttons
 - **Shape:** Sharp (`0`)
-- **Primary:** Full-width start-block — lane fill, asphalt ink, condensed uppercase, height `48px`, start-block shadow; hover lane at ~90% opacity; active `translateY(1px)`
+- **Primary:** Full-width — lane fill, asphalt ink, condensed uppercase, height `48px`, soft CTA shadow; hover lane at ~90% opacity; active `translateY(1px)`
 - **Hover / Focus:** Soften lane fill; focus rings use lane at reduced alpha on fields (`ring-lane/60`)
 - **Tab pair:** Two-up mode switch in a pit (`asphalt/5` well, `asphalt/15` border); active tab asphalt fill + rail text
 
 ### Chips
 - **Style:** Condensed uppercase kind tags — tinted lane/signal/cobalt at ~15% fill + solid accent text; no border radius
-- **State:** Meaning-coded (Recall ↔ lane or cobalt; Re-solve ↔ signal), not selected/unselected filters
+- **State:** Meaning-coded (Recall ↔ lane or cobalt; Re-solve ↔ signal)
 
 ### Cards / Containers
 - **Corner Style:** Sharp
-- **Background:** Today’s Reps strip = translucent asphalt over the field; rows = lane-board wells with `rail/10` border
-- **Shadow Strategy:** Strip settle only; rows stay flat
-- **Border:** `rail/20` on strip; `rail/10` on rows
-- **Internal Padding:** Strip `16px`; rows `10px 12px`
+- **Today's Reps demo:** Framed as an in-app / browser screenshot beside the step list on desktop (stacks under steps on mobile). Caption: “Dashboard preview · synthetic.” Chrome: window dots + URL (`leetrep.app/dashboard`). Inner pane shows Today's Reps with demo data. Soft low-opacity emerald/rail back-glow (blurred spotlight) behind the frame only — product-shot depth, not neon UI chrome. Slight desktop tilt optional for “preview” read; not live UI.
+- **Landing containers:** Open stamped steps + one framed product preview — avoid extra widgets.
 
 ### Inputs / Fields
 - **Style:** White field, asphalt text, `asphalt/20` border, height `44px`, square; optional leading glyph slot with `40px` left padding
@@ -228,24 +226,25 @@ Form language is sharp steel: signature controls and board chrome use `0` radius
 - **Error / Disabled:** Destructive text for errors; disabled CTA at 50% opacity
 
 ### Navigation
-- Landing has no global nav — the wordmark is identity only. Auth mode tabs are the only local navigation pattern (see Buttons).
+- Landing has no global nav — the wordmark is identity only. Auth mode tabs are the only local navigation pattern.
 
-### Wordmark (Lane Board)
-Condensed extrabold mark at `text-3xl`–`text-4xl`: upright rail “Leet” + italic lane “Rep.” Appears once at the top of the course column.
+### Wordmark
+Condensed extrabold mark at `text-3xl`–`text-4xl`: upright rail “Leet” + italic lane “Rep.” Appears once at the top of the journal column.
 
-### Loop Step Marker
-Square `2.75rem` blocks on a vertical `lane/50` spine; fill cycles lane → signal → cobalt → lane → signal with asphalt or white ink; optional small icon above the step numeral.
+### Loop Step Stamp
+Square icon stamps in a straight vertical list (no staircase indent); fill cycles lane → signal → cobalt → lane → signal. No ruled wallpaper, vertical spine, or track markers.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** keep the Meet Program split: course (asphalt + loop + reps strip) beside a full-height rail for auth.
+- **Do** keep the Meet Program split: journal field (loop + checklist) beside a full-height clipboard rail for auth.
 - **Do** use Barlow Condensed uppercase for program voice and Barlow for body sentences.
-- **Do** cycle only emerald / orange / cobalt for lane meaning.
-- **Do** keep signature controls sharp (`0` radius) with steel seams.
+- **Do** cycle only emerald / orange / cobalt for accent meaning.
+- **Do** keep signature controls sharp (`0` radius) with hairline seams.
 
 ### Don't:
 - **Don't** mimic LeetCode’s brand colors, logo treatment, or problem-list chrome.
-- **Don't** introduce purple glows, soft pill clusters, or rounded marketing cards on the course.
-- **Don't** replace the Lane Board wordmark with a glyph logo or monochrome lockup.
-- **Don't** put secondary marketing blocks (stats strips, promo chips, schedule calendars) into the first viewport beyond the loop and synthetic Today’s Reps strip.
+- **Don't** introduce purple glows, soft pill clusters, or rounded marketing cards on the field.
+- **Don't** replace the wordmark with a glyph logo or monochrome lockup.
+- **Don't** use track paint, asphalt photography, starting-block steel edges, race-lane labels, or ruled/grid notebook wallpaper.
+- **Don't** put secondary marketing blocks (stats strips, promo chips) into the first viewport beyond the step list and one Today's Reps demo panel.
