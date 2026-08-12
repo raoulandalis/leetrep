@@ -35,8 +35,12 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const pathname = request.nextUrl.pathname;
+  const appPrefixes = ["/dashboard", "/problems", "/progress", "/settings"];
+  const isAppRoute = appPrefixes.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
+  );
 
-  if (!user && pathname.startsWith("/dashboard")) {
+  if (!user && isAppRoute) {
     const url = request.nextUrl.clone();
     url.pathname = "/";
     const redirectResponse = NextResponse.redirect(url);

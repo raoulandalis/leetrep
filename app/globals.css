@@ -45,6 +45,10 @@
   --color-signal: var(--signal);
   --color-cobalt: var(--cobalt);
   --color-rail: var(--rail);
+  --color-lane-pit: var(--lane-pit);
+  --color-lane-board: var(--lane-board);
+  --color-steel-seam: var(--steel-seam);
+  --color-track-mist: var(--track-mist);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -61,6 +65,10 @@
   --lane: #36d9a0;
   --signal: #ff5a1f;
   --cobalt: #3d7eff;
+  --lane-pit: #1a2330;
+  --lane-board: #121a24;
+  --steel-seam: #2a3544;
+  --track-mist: #9aa3ad;
 
   --background: var(--asphalt);
   --foreground: #f4f1ec;
@@ -86,13 +94,13 @@
   --chart-4: #9aa3ad;
   --chart-5: #f4f1ec;
   --radius: 0.35rem;
-  --sidebar: #121a24;
-  --sidebar-foreground: #f4f1ec;
+  --sidebar: #f4f1ec;
+  --sidebar-foreground: #0f1720;
   --sidebar-primary: var(--lane);
   --sidebar-primary-foreground: #0f1720;
-  --sidebar-accent: #1a2330;
+  --sidebar-accent: #0f1720;
   --sidebar-accent-foreground: #f4f1ec;
-  --sidebar-border: #2a3544;
+  --sidebar-border: rgb(15 23 32 / 0.1);
   --sidebar-ring: var(--lane);
 }
 
