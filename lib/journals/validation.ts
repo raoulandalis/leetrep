@@ -2,13 +2,48 @@ import type { JournalInput } from "@/lib/journals/types";
 import type { ActionResult } from "@/lib/problems/types";
 
 export const JOURNAL_FIELDS = [
-  { name: "approach", label: "My Approach", kind: "textarea" },
-  { name: "key_insight", label: "Key Insight", kind: "textarea" },
-  { name: "why_it_works", label: "Why It Works", kind: "textarea" },
-  { name: "time_complexity", label: "Time Complexity", kind: "input" },
-  { name: "space_complexity", label: "Space Complexity", kind: "input" },
-  { name: "struggles", label: "What I Struggled With", kind: "textarea" },
-  { name: "additional_notes", label: "Additional Notes", kind: "textarea" },
+  {
+    name: "approach",
+    label: "My Approach",
+    kind: "textarea",
+    placeholder: "Walk through the steps you actually took, in your own words.",
+  },
+  {
+    name: "key_insight",
+    label: "Key Insight",
+    kind: "textarea",
+    placeholder: "The one idea that made the solution click.",
+  },
+  {
+    name: "why_it_works",
+    label: "Why It Works",
+    kind: "textarea",
+    placeholder: "Why this is correct — not just that it passed.",
+  },
+  {
+    name: "time_complexity",
+    label: "Time Complexity",
+    kind: "input",
+    placeholder: "O(n)",
+  },
+  {
+    name: "space_complexity",
+    label: "Space Complexity",
+    kind: "input",
+    placeholder: "O(1)",
+  },
+  {
+    name: "struggles",
+    label: "What I Struggled With",
+    kind: "textarea",
+    placeholder: "Where you got stuck, and what you tried first.",
+  },
+  {
+    name: "additional_notes",
+    label: "Additional Notes",
+    kind: "textarea",
+    placeholder: "Edge cases, follow-ups, or anything else worth remembering.",
+  },
 ] as const;
 
 function emptyToNull(raw: string): string | null {

@@ -178,9 +178,22 @@ export function DifficultyChip({ difficulty }: { difficulty: Difficulty }) {
   );
 }
 
-export function PatternChip({ label }: { label: string }) {
+export function PatternChip({
+  label,
+  onRail = false,
+}: {
+  label: string;
+  onRail?: boolean;
+}) {
   return (
-    <span className="font-display border border-steel-seam px-2 py-0.5 text-xs font-bold tracking-[0.16em] text-track-mist uppercase">
+    <span
+      className={cn(
+        "font-display px-2 py-0.5 text-xs font-bold tracking-[0.16em] uppercase",
+        onRail
+          ? "border border-asphalt/20 text-asphalt/60"
+          : "border border-steel-seam text-track-mist"
+      )}
+    >
       {label}
     </span>
   );
