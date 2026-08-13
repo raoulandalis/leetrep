@@ -1,4 +1,5 @@
 import type { JournalInput } from "@/lib/journals/types";
+import { isComplexity } from "@/lib/journals/types";
 import type { ActionResult } from "@/lib/problems/types";
 
 export const JOURNAL_FIELDS = [
@@ -23,14 +24,12 @@ export const JOURNAL_FIELDS = [
   {
     name: "time_complexity",
     label: "Time Complexity",
-    kind: "input",
-    placeholder: "O(n)",
+    kind: "select",
   },
   {
     name: "space_complexity",
     label: "Space Complexity",
-    kind: "input",
-    placeholder: "O(1)",
+    kind: "select",
   },
   {
     name: "struggles",
@@ -51,6 +50,14 @@ function emptyToNull(raw: string): string | null {
   return trimmed === "" ? null : trimmed;
 }
 
+function parseComplexity(raw: string): string | null | false {
+  const trimmed = raw.trim();
+  if (!trimmed) {
+    return null;
+  }
+  return isComplexity(trimmed) ? trimmed : false;
+}
+
 export function parseJournalForm(
   formData: FormData
 ):
@@ -61,14 +68,26 @@ export function parseJournalForm(
     return { ok: false, error: "Missing problem id." };
   }
 
+  const time_complexity = parseComplexity(
+    String(formData.get("time_complexity") ?? "")
+  );
+  const space_complexity = parseComplexity(
+    String(formData.get("space_complexity") ?? "")
+  );
+
+  if (time_complexity === false || space_complexity === false) {
+    return {
+      ok: false,
+      error: "Choose a time and space complexity from the list.",
+    };
+  }
+
   const value: JournalInput = {
     approach: emptyToNull(String(formData.get("approach") ?? "")),
     key_insight: emptyToNull(String(formData.get("key_insight") ?? "")),
     why_it_works: emptyToNull(String(formData.get("why_it_works") ?? "")),
-    time_complexity: emptyToNull(String(formData.get("time_complexity") ?? "")),
-    space_complexity: emptyToNull(
-      String(formData.get("space_complexity") ?? "")
-    ),
+    time_complexity,
+    space_complexity,
     struggles: emptyToNull(String(formData.get("struggles") ?? "")),
     additional_notes: emptyToNull(
       String(formData.get("additional_notes") ?? "")

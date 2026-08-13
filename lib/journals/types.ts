@@ -22,3 +22,21 @@ export type JournalInput = {
   struggles: string | null;
   additional_notes: string | null;
 };
+
+export const COMPLEXITY_OPTIONS = [
+  "O(1)",
+  "O(log n)",
+  "O(√n)",
+  "O(n)",
+  "O(n log n)",
+  "O(n²)",
+  "O(n³)",
+  "O(2^n)",
+  "O(n!)",
+] as const;
+
+export type Complexity = (typeof COMPLEXITY_OPTIONS)[number];
+
+export function isComplexity(value: string): value is Complexity {
+  return (COMPLEXITY_OPTIONS as readonly string[]).includes(value);
+}
