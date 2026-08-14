@@ -9,10 +9,13 @@ import {
   DifficultyChip,
   PatternChip,
 } from "@/components/problems/problem-list";
+import { ReviewSchedule } from "@/components/reviews/review-schedule";
 import { saveJournal } from "@/lib/journals/actions";
 import { getJournal } from "@/lib/journals/queries";
 import { updateProblem } from "@/lib/problems/actions";
 import { getProblem } from "@/lib/problems/queries";
+import { ensureReviewTasks } from "@/lib/reviews/persist";
+import { listReviewTasksForProblem } from "@/lib/reviews/queries";
 import { formatCompletedDate } from "@/lib/problems/validation";
 
 export default async function ProblemDetailPage({
@@ -40,6 +43,11 @@ export default async function ProblemDetailPage({
   if (!problem) {
     notFound();
   }
+
+  const { error: ensureError } = await ensureReviewTasks(id);
+  const { tasks, error: reviewError } = ensureError
+    ? { tasks: [], error: ensureError }
+    : await listReviewTasksForProblem(id);
 
   return (
     <div className="flex flex-col gap-8">
@@ -107,6 +115,15 @@ export default async function ProblemDetailPage({
           action={saveJournal}
         />
       </section>
+
+      {reviewError ? (
+        <ErrorState
+          title="Couldn't load reviews"
+          description={reviewError}
+        />
+      ) : (
+        <ReviewSchedule tasks={tasks} />
+      )}
 
       <DeleteProblemButton problemId={problem.id} title={problem.title} />
     </div>

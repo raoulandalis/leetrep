@@ -3,6 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { insertReviewSchedule } from "@/lib/reviews/persist";
+import { todayYmd } from "@/lib/reviews/schedule";
 import type { ActionResult } from "@/lib/problems/types";
 import { parseProblemForm } from "@/lib/problems/validation";
 
@@ -33,16 +35,40 @@ export async function createProblem(
     return { ok: false, error: "You need to sign in to add a problem." };
   }
 
-  const { error } = await supabase.from("problems").insert({
-    user_id: user.id,
-    leetcode_url: parsed.value.leetcode_url,
-    title: parsed.value.title,
-    difficulty: parsed.value.difficulty,
-    patterns: parsed.value.patterns,
-    date_completed: parsed.value.date_completed,
+  const { data: problem, error } = await supabase
+    .from("problems")
+    .insert({
+      user_id: user.id,
+      leetcode_url: parsed.value.leetcode_url,
+      title: parsed.value.title,
+      difficulty: parsed.value.difficulty,
+      patterns: parsed.value.patterns,
+      date_completed: parsed.value.date_completed,
+    })
+    .select("id")
+    .single();
+
+  if (error || !problem) {
+    return {
+      ok: false,
+      error: "Couldn't save this problem. Try again in a moment.",
+    };
+  }
+
+  const { error: scheduleError } = await insertReviewSchedule({
+    supabase,
+    userId: user.id,
+    problemId: problem.id,
+    day0: todayYmd(),
   });
 
-  if (error) {
+  if (scheduleError) {
+    await supabase
+      .from("problems")
+      .delete()
+      .eq("id", problem.id)
+      .eq("user_id", user.id);
+
     return {
       ok: false,
       error: "Couldn't save this problem. Try again in a moment.",
@@ -50,6 +76,8 @@ export async function createProblem(
   }
 
   revalidatePath("/problems");
+  revalidatePath(`/problems/${problem.id}`);
+  revalidatePath("/dashboard");
   redirect("/problems");
 }
 
@@ -99,6 +127,7 @@ export async function updateProblem(
 
   revalidatePath("/problems");
   revalidatePath(`/problems/${id}`);
+  revalidatePath("/dashboard");
   return { ok: true };
 }
 
@@ -133,5 +162,6 @@ export async function deleteProblem(id: string): Promise<ActionResult> {
 
   revalidatePath("/problems");
   revalidatePath(`/problems/${trimmed}`);
+  revalidatePath("/dashboard");
   redirect("/problems");
 }
