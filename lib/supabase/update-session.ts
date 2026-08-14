@@ -35,7 +35,13 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const pathname = request.nextUrl.pathname;
-  const appPrefixes = ["/dashboard", "/problems", "/progress", "/settings"];
+  const appPrefixes = [
+    "/dashboard",
+    "/problems",
+    "/progress",
+    "/settings",
+    "/reviews",
+  ];
   const isAppRoute = appPrefixes.some(
     (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
   );

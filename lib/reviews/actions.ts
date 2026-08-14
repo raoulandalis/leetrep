@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import type { ActionResult } from "@/lib/problems/types";
+import { taskStatus, todayYmd } from "@/lib/reviews/schedule";
 
 async function requireUser() {
   const supabase = await createClient();
@@ -30,7 +31,7 @@ export async function completeReviewTask(id: string): Promise<ActionResult> {
 
   const { data: existing, error: existingError } = await supabase
     .from("review_tasks")
-    .select("id, problem_id, completed_at")
+    .select("id, problem_id, scheduled_for, completed_at")
     .eq("id", trimmed)
     .eq("user_id", user.id)
     .maybeSingle();
@@ -44,6 +45,13 @@ export async function completeReviewTask(id: string): Promise<ActionResult> {
 
   if (!existing) {
     return { ok: false, error: "Review task not found." };
+  }
+
+  if (
+    taskStatus(existing.scheduled_for, existing.completed_at, todayYmd()) ===
+    "upcoming"
+  ) {
+    return { ok: false, error: "This rep isn't due yet." };
   }
 
   if (!existing.completed_at) {
@@ -70,5 +78,13 @@ export async function completeReviewTask(id: string): Promise<ActionResult> {
   revalidatePath("/problems");
   revalidatePath(`/problems/${existing.problem_id}`);
   revalidatePath("/dashboard");
+  revalidatePath(`/reviews/${trimmed}`);
   return { ok: true };
+}
+
+export async function completeRepAction(
+  _prev: ActionResult | null,
+  formData: FormData
+): Promise<ActionResult> {
+  return completeReviewTask(String(formData.get("id") ?? ""));
 }

@@ -1,3 +1,5 @@
+import type { Journal } from "@/lib/journals/types";
+
 export const REVIEW_TYPES = ["Recall", "Re-solve"] as const;
 
 export type ReviewType = (typeof REVIEW_TYPES)[number];
@@ -26,11 +28,18 @@ export type ReviewTask = {
   created_at: string;
 };
 
+export type ReviewProblem = {
+  title: string;
+  difficulty: string;
+  patterns: string[];
+  leetcode_url: string;
+};
+
 export type DueReviewTask = ReviewTask & {
-  problems: {
-    title: string;
-    difficulty: string;
-    patterns: string[];
-    leetcode_url: string;
-  } | null;
+  problems: ReviewProblem | null;
+};
+
+export type ReviewRep = ReviewTask & {
+  problems: ReviewProblem | null;
+  journal: Journal | null;
 };

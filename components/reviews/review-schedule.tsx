@@ -1,6 +1,9 @@
+import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { ReviewTypeChip } from "@/components/reviews/review-type-chip";
+import { canStartRep } from "@/lib/reviews/rep";
 import { taskStatus, todayYmd } from "@/lib/reviews/schedule";
-import type { ReviewStatus, ReviewTask, ReviewType } from "@/lib/reviews/types";
+import type { ReviewStatus, ReviewTask } from "@/lib/reviews/types";
 import { formatCompletedDate } from "@/lib/problems/validation";
 
 const STATUS_LABEL: Record<ReviewStatus, string> = {
@@ -9,12 +12,6 @@ const STATUS_LABEL: Record<ReviewStatus, string> = {
   overdue: "Overdue",
   done: "Done",
 };
-
-function typeTone(type: ReviewType) {
-  return type === "Recall"
-    ? "border-lane/40 text-lane"
-    : "border-cobalt/40 text-cobalt";
-}
 
 function statusTone(status: ReviewStatus) {
   switch (status) {
@@ -54,33 +51,37 @@ export function ReviewSchedule({ tasks }: { tasks: ReviewTask[] }) {
               task.completed_at,
               today
             );
+            const startable = canStartRep(status);
 
             return (
               <li
                 key={task.id}
-                className="flex flex-col gap-2 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6"
+                className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6"
               >
                 <div className="flex min-w-0 flex-col gap-2">
                   <p className="font-display text-base font-bold tracking-tight text-rail">
                     {formatCompletedDate(task.scheduled_for)}
                   </p>
-                  <span
+                  <ReviewTypeChip type={task.review_type} bordered />
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <p
                     className={cn(
-                      "w-fit font-display px-2 py-0.5 text-xs font-bold tracking-[0.16em] uppercase border",
-                      typeTone(task.review_type)
+                      "font-display text-xs font-bold tracking-[0.16em] uppercase",
+                      statusTone(status)
                     )}
                   >
-                    {task.review_type}
-                  </span>
+                    {STATUS_LABEL[status]}
+                  </p>
+                  {startable ? (
+                    <Link
+                      href={`/reviews/${task.id}`}
+                      className="inline-flex h-10 items-center justify-center bg-lane px-4 font-display text-sm font-extrabold tracking-[0.12em] text-asphalt uppercase transition-colors hover:bg-lane/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lane focus-visible:ring-offset-2 focus-visible:ring-offset-asphalt"
+                    >
+                      Start Rep
+                    </Link>
+                  ) : null}
                 </div>
-                <p
-                  className={cn(
-                    "font-display text-xs font-bold tracking-[0.16em] uppercase",
-                    statusTone(status)
-                  )}
-                >
-                  {STATUS_LABEL[status]}
-                </p>
               </li>
             );
           })}
