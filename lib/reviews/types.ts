@@ -43,3 +43,9 @@ export type ReviewRep = ReviewTask & {
   problems: ReviewProblem | null;
   journal: Journal | null;
 };
+
+export type DashboardStats = {
+  problems: number;
+  repsCompleted: number;
+  dayStreak: number;
+};

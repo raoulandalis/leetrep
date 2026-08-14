@@ -1,11 +1,20 @@
 import { getJournal } from "@/lib/journals/queries";
 import { createClient } from "@/lib/supabase/server";
+import { todayYmd } from "@/lib/reviews/schedule";
+import { dayStreak } from "@/lib/reviews/streak";
 import type {
+  DashboardStats,
   DueReviewTask,
   ReviewProblem,
   ReviewRep,
   ReviewTask,
 } from "@/lib/reviews/types";
+
+const EMPTY_DASHBOARD_STATS: DashboardStats = {
+  problems: 0,
+  repsCompleted: 0,
+  dayStreak: 0,
+};
 
 const REVIEW_COLUMNS =
   "id, user_id, problem_id, review_type, scheduled_for, completed_at, created_at";
@@ -110,6 +119,85 @@ export async function listDueReviewTasks(today: string): Promise<{
   }
 
   return { tasks, error: null };
+}
+
+export async function getDashboardStats(): Promise<{
+  stats: DashboardStats;
+  error: string | null;
+}> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return {
+      stats: EMPTY_DASHBOARD_STATS,
+      error: "You need to sign in to view today's reps.",
+    };
+  }
+
+  const [problemsResult, completionsResult] = await Promise.all([
+    supabase
+      .from("problems")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", user.id),
+    supabase
+      .from("review_tasks")
+      .select("completed_at")
+      .eq("user_id", user.id)
+      .not("completed_at", "is", null),
+  ]);
+
+  const problemsNoRows =
+    !problemsResult.error ||
+    problemsResult.error.code === "PGRST116" ||
+    problemsResult.error.code === "PGRST103" ||
+    /0 rows|no rows|cannot coerce/i.test(
+      `${problemsResult.error.message ?? ""} ${problemsResult.error.details ?? ""}`
+    );
+
+  if (!problemsNoRows) {
+    return {
+      stats: EMPTY_DASHBOARD_STATS,
+      error: "Couldn't load today's stats. Try again in a moment.",
+    };
+  }
+
+  const completionRows = Array.isArray(completionsResult.data)
+    ? completionsResult.data
+    : [];
+
+  if (completionRows.length === 0) {
+    const completionsNoRows =
+      !completionsResult.error ||
+      completionsResult.error.code === "PGRST116" ||
+      completionsResult.error.code === "PGRST103" ||
+      /0 rows|no rows|cannot coerce/i.test(
+        `${completionsResult.error.message ?? ""} ${completionsResult.error.details ?? ""}`
+      );
+
+    if (!completionsNoRows) {
+      return {
+        stats: EMPTY_DASHBOARD_STATS,
+        error: "Couldn't load today's stats. Try again in a moment.",
+      };
+    }
+  }
+
+  const completionYmds = completionRows
+    .map((row) => row.completed_at)
+    .filter((value): value is string => typeof value === "string")
+    .map((value) => value.slice(0, 10));
+
+  return {
+    stats: {
+      problems: problemsResult.count ?? 0,
+      repsCompleted: completionRows.length,
+      dayStreak: dayStreak(completionYmds, todayYmd()),
+    },
+    error: null,
+  };
 }
 
 function unwrapProblem(related: unknown): ReviewProblem | null {

@@ -1,12 +1,19 @@
+import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 type StateProps = {
   title: string;
   description: string;
   className?: string;
+  action?: ReactNode;
 };
 
-export function EmptyState({ title, description, className }: StateProps) {
+export function EmptyState({
+  title,
+  description,
+  className,
+  action,
+}: StateProps) {
   return (
     <div
       className={cn(
@@ -18,6 +25,7 @@ export function EmptyState({ title, description, className }: StateProps) {
         {title}
       </h2>
       <p className="text-sm leading-relaxed text-track-mist">{description}</p>
+      {action ? <div className="pt-2">{action}</div> : null}
     </div>
   );
 }
