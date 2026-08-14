@@ -8,10 +8,10 @@ import { Button } from "@/components/ui/button";
 
 type MobileNavProps = {
   email: string | undefined;
-  displayName: string;
+  fullName: string;
 };
 
-export function MobileNav({ email, displayName }: MobileNavProps) {
+export function MobileNav({ email, fullName }: MobileNavProps) {
   const [open, setOpen] = useState(false);
   const titleId = useId();
 
@@ -78,7 +78,7 @@ export function MobileNav({ email, displayName }: MobileNavProps) {
             </div>
             <div className="flex flex-1 flex-col px-4 py-5">
               <AppNav onNavigate={() => setOpen(false)} />
-              <UserMenu email={email} displayName={displayName} />
+              <UserMenu email={email} fullName={fullName} />
             </div>
           </div>
         </div>

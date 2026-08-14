@@ -1,16 +1,16 @@
 "use client";
 
-import { firstName, greetingPeriod } from "@/lib/reviews/greeting";
+import { greetingPeriod } from "@/lib/reviews/greeting";
 
 export function DashboardGreeting({
-  displayName,
+  firstName,
   dueCount,
 }: {
-  displayName: string;
+  firstName: string | null;
   dueCount: number;
 }) {
   const period = greetingPeriod(new Date().getHours());
-  const name = firstName(displayName);
+  const hello = firstName ? `Good ${period}, ${firstName}.` : `Good ${period}.`;
 
   return (
     <header className="flex flex-col gap-2">
@@ -18,7 +18,7 @@ export function DashboardGreeting({
         className="font-display text-3xl font-extrabold tracking-tight text-rail uppercase"
         suppressHydrationWarning
       >
-        Good {period}, {name}.
+        {hello}
       </p>
       {dueCount > 0 ? (
         <p className="max-w-xl text-base leading-relaxed text-track-mist">

@@ -2,23 +2,27 @@ import { EmptyState, ErrorState } from "@/components/app/page-states";
 import { DashboardGreeting } from "@/components/dashboard/dashboard-greeting";
 import { DashboardStats } from "@/components/dashboard/dashboard-stats";
 import { AddProblemLink } from "@/components/problems/add-problem-link";
+import { NameOnboardingDialog } from "@/components/profiles/name-onboarding-dialog";
 import { DueRepList } from "@/components/reviews/due-rep-list";
+import { getProfile } from "@/lib/profiles/queries";
 import {
   getDashboardStats,
   listDueReviewTasks,
 } from "@/lib/reviews/queries";
 import { todayYmd } from "@/lib/reviews/schedule";
-import { createClient } from "@/lib/supabase/server";
 
 export default async function DashboardPage() {
-  const [{ tasks, error: tasksError }, { stats, error: statsError }, displayName] =
+  const [{ tasks, error: tasksError }, { stats, error: statsError }, { profile }] =
     await Promise.all([
       listDueReviewTasks(todayYmd()),
       getDashboardStats(),
-      loadDisplayName(),
+      getProfile(),
     ]);
 
   const error = tasksError ?? statsError;
+  const firstName = profile?.first_name?.trim() || null;
+  const needsName =
+    !firstName || !profile?.last_name?.trim();
   const empty =
     stats.problems === 0
       ? {
@@ -33,7 +37,10 @@ export default async function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <DashboardGreeting displayName={displayName} dueCount={tasks.length} />
+      {needsName && profile ? (
+        <NameOnboardingDialog profile={profile} />
+      ) : null}
+      <DashboardGreeting firstName={firstName} dueCount={tasks.length} />
       <DashboardStats stats={stats} />
 
       <section className="flex flex-col gap-6">
@@ -54,27 +61,5 @@ export default async function DashboardPage() {
         )}
       </section>
     </div>
-  );
-}
-
-async function loadDisplayName(): Promise<string> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return "Athlete";
-  }
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("display_name")
-    .eq("user_id", user.id)
-    .maybeSingle();
-
-  return (
-    profile?.display_name?.trim() ||
-    (user.email ? user.email.split("@")[0] : "Athlete")
   );
 }

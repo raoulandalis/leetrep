@@ -2,19 +2,23 @@ import { Button } from "@/components/ui/button";
 
 type UserMenuProps = {
   email: string | undefined;
-  displayName: string;
+  fullName: string;
 };
 
-export function UserMenu({ email, displayName }: UserMenuProps) {
+export function UserMenu({ email, fullName }: UserMenuProps) {
+  const primary = fullName || email;
+
   return (
     <div className="border-t border-asphalt/10 pt-4">
       <p className="font-display px-3 text-xs font-bold tracking-[0.16em] text-asphalt/45 uppercase">
         Signed in
       </p>
-      <p className="mt-1 truncate px-3 text-sm font-medium text-asphalt">
-        {displayName}
-      </p>
-      {email && displayName !== email ? (
+      {primary ? (
+        <p className="mt-1 truncate px-3 text-sm font-medium text-asphalt">
+          {primary}
+        </p>
+      ) : null}
+      {email && fullName ? (
         <p className="mt-0.5 truncate px-3 text-xs text-asphalt/55">{email}</p>
       ) : null}
       <form action="/auth/signout" method="post" className="mt-3 px-1">

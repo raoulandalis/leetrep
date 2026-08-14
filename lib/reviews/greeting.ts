@@ -9,8 +9,3 @@ export function greetingPeriod(hour: number): GreetingPeriod {
   }
   return "evening";
 }
-
-export function firstName(displayName: string): string {
-  const token = displayName.trim().split(/\s+/)[0];
-  return token || "Athlete";
-}

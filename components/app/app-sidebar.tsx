@@ -3,10 +3,10 @@ import { UserMenu } from "@/components/app/user-menu";
 
 type AppSidebarProps = {
   email: string | undefined;
-  displayName: string;
+  fullName: string;
 };
 
-export function AppSidebar({ email, displayName }: AppSidebarProps) {
+export function AppSidebar({ email, fullName }: AppSidebarProps) {
   return (
     <aside className="hidden h-svh w-60 shrink-0 flex-col border-r border-asphalt/10 bg-rail text-asphalt lg:flex">
       <div className="flex h-full flex-col px-4 py-6">
@@ -14,7 +14,7 @@ export function AppSidebar({ email, displayName }: AppSidebarProps) {
           <Wordmark />
         </div>
         <AppNav />
-        <UserMenu email={email} displayName={displayName} />
+        <UserMenu email={email} fullName={fullName} />
       </div>
     </aside>
   );
