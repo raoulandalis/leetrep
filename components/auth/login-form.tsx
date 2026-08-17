@@ -4,6 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { updateProfile } from "@/lib/profiles/actions";
+import type { ProfileFieldErrors } from "@/lib/profiles/types";
+import { parseProfileForm } from "@/lib/profiles/validation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -12,14 +15,27 @@ type Mode = "signin" | "signup" | "confirm";
 const fieldClass =
   "h-11 w-full border border-asphalt/20 bg-white text-sm text-asphalt outline-none transition-[border-color,box-shadow,transform] placeholder:text-asphalt/35 focus-visible:border-asphalt focus-visible:ring-2 focus-visible:ring-lane/60";
 
+const labelClass =
+  "font-display text-xs font-bold tracking-[0.16em] text-asphalt/55 uppercase";
+
+function profileFormData(firstName: string, lastName: string) {
+  const formData = new FormData();
+  formData.set("first_name", firstName);
+  formData.set("last_name", lastName);
+  return formData;
+}
+
 export function LoginForm() {
   const router = useRouter();
   const [mode, setMode] = useState<Mode>("signin");
   const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [otp, setOtp] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<ProfileFieldErrors | undefined>();
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -28,9 +44,23 @@ export function LoginForm() {
     router.refresh();
   }
 
+  async function saveSignupProfile(name: { firstName: string; lastName: string }) {
+    const result = await updateProfile(
+      null,
+      profileFormData(name.firstName, name.lastName)
+    );
+
+    if (!result.ok) {
+      return result.error ?? "Couldn't save your profile. Try again in Settings.";
+    }
+
+    return null;
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setFieldErrors(undefined);
     setMessage(null);
     setLoading(true);
 
@@ -45,6 +75,13 @@ export function LoginForm() {
 
       if (verifyError) {
         setError(verifyError.message);
+        setLoading(false);
+        return;
+      }
+
+      const profileError = await saveSignupProfile({ firstName, lastName });
+      if (profileError) {
+        setError(profileError);
         setLoading(false);
         return;
       }
@@ -69,9 +106,25 @@ export function LoginForm() {
       return;
     }
 
+    const parsed = parseProfileForm(
+      profileFormData(firstName.trim(), lastName.trim())
+    );
+    if (!parsed.ok) {
+      setFieldErrors(parsed.fieldErrors);
+      setError(parsed.error);
+      setLoading(false);
+      return;
+    }
+
     const { data, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        data: {
+          first_name: parsed.value.first_name,
+          last_name: parsed.value.last_name,
+        },
+      },
     });
 
     if (signUpError) {
@@ -81,6 +134,16 @@ export function LoginForm() {
     }
 
     if (data.session) {
+      const profileError = await saveSignupProfile({
+        firstName: parsed.value.first_name,
+        lastName: parsed.value.last_name,
+      });
+      if (profileError) {
+        setError(profileError);
+        setLoading(false);
+        return;
+      }
+
       goToDashboard();
       return;
     }
@@ -112,6 +175,12 @@ export function LoginForm() {
     setLoading(false);
   }
 
+  function clearFormErrors() {
+    setError(null);
+    setFieldErrors(undefined);
+    setMessage(null);
+  }
+
   if (mode === "confirm") {
     return (
       <form
@@ -130,10 +199,7 @@ export function LoginForm() {
         </div>
 
         <div className="flex flex-col gap-2">
-          <label
-            htmlFor="otp"
-            className="font-display text-xs font-bold tracking-[0.16em] text-asphalt/55 uppercase"
-          >
+          <label htmlFor="otp" className={labelClass}>
             Confirmation code
           </label>
           <input
@@ -189,8 +255,7 @@ export function LoginForm() {
             onClick={() => {
               setMode("signup");
               setOtp("");
-              setError(null);
-              setMessage(null);
+              clearFormErrors();
             }}
           >
             Back
@@ -222,8 +287,7 @@ export function LoginForm() {
           )}
           onClick={() => {
             setMode("signin");
-            setError(null);
-            setMessage(null);
+            clearFormErrors();
           }}
         >
           Log in
@@ -240,8 +304,7 @@ export function LoginForm() {
           )}
           onClick={() => {
             setMode("signup");
-            setError(null);
-            setMessage(null);
+            clearFormErrors();
           }}
         >
           Sign up
@@ -259,11 +322,29 @@ export function LoginForm() {
         </p>
       </div>
 
+      {mode === "signup" ? (
+        <div className="grid gap-4 sm:grid-cols-2">
+          <NameField
+            id="signup-first-name"
+            label="First name"
+            value={firstName}
+            onChange={setFirstName}
+            autoComplete="given-name"
+            error={fieldErrors?.first_name}
+          />
+          <NameField
+            id="signup-last-name"
+            label="Last name"
+            value={lastName}
+            onChange={setLastName}
+            autoComplete="family-name"
+            error={fieldErrors?.last_name}
+          />
+        </div>
+      ) : null}
+
       <div className="flex flex-col gap-2">
-        <label
-          htmlFor="email"
-          className="font-display text-xs font-bold tracking-[0.16em] text-asphalt/55 uppercase"
-        >
+        <label htmlFor="email" className={labelClass}>
           Email
         </label>
         <div className="relative">
@@ -284,10 +365,7 @@ export function LoginForm() {
       </div>
 
       <div className="flex flex-col gap-2">
-        <label
-          htmlFor="password"
-          className="font-display text-xs font-bold tracking-[0.16em] text-asphalt/55 uppercase"
-        >
+        <label htmlFor="password" className={labelClass}>
           Password
         </label>
         <div className="relative">
@@ -347,5 +425,46 @@ export function LoginForm() {
             : "Create account →"}
       </Button>
     </form>
+  );
+}
+
+function NameField({
+  id,
+  label,
+  value,
+  onChange,
+  autoComplete,
+  error,
+}: {
+  id: string;
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  autoComplete: "given-name" | "family-name";
+  error?: string;
+}) {
+  return (
+    <div className="flex flex-col gap-2">
+      <label htmlFor={id} className={labelClass}>
+        {label}
+      </label>
+      <input
+        id={id}
+        type="text"
+        required
+        maxLength={80}
+        autoComplete={autoComplete}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={error ? `${id}-error` : undefined}
+        className={cn(fieldClass, "px-3")}
+      />
+      {error ? (
+        <p id={`${id}-error`} className="text-sm text-destructive" role="alert">
+          {error}
+        </p>
+      ) : null}
+    </div>
   );
 }
