@@ -1,4 +1,10 @@
-import type { DifficultyCounts, NamedCount, WeekBucket } from "./types";
+import type {
+  DayBucket,
+  DifficultyCounts,
+  NamedCount,
+  ProgressHistory,
+  WeekBucket,
+} from "./types";
 
 const DIFFICULTIES = ["Easy", "Medium", "Hard"] as const;
 
@@ -79,4 +85,47 @@ export function repsByWeek(
   }
 
   return buckets;
+}
+
+export function repsByDay(
+  completionYmds: string[],
+  today: string
+): DayBucket[] {
+  const monday = startOfWeekMonday(today);
+  const buckets: DayBucket[] = [];
+
+  for (let index = 0; index < 7; index += 1) {
+    buckets.push({
+      day: addCalendarDays(monday, index),
+      count: 0,
+    });
+  }
+
+  const indexByDay = new Map(
+    buckets.map((bucket, index) => [bucket.day, index])
+  );
+
+  for (const ymd of completionYmds) {
+    const index = indexByDay.get(ymd);
+    if (index === undefined) {
+      continue;
+    }
+    buckets[index].count += 1;
+  }
+
+  return buckets;
+}
+
+export const MONTH_WEEK_COUNT = 5;
+export const QUARTER_WEEK_COUNT = 12;
+
+export function buildRepHistory(
+  completionYmds: string[],
+  today: string
+): ProgressHistory {
+  return {
+    week: repsByDay(completionYmds, today),
+    month: repsByWeek(completionYmds, today, MONTH_WEEK_COUNT),
+    quarter: repsByWeek(completionYmds, today, QUARTER_WEEK_COUNT),
+  };
 }

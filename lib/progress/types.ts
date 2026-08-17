@@ -14,6 +14,19 @@ export type WeekBucket = {
   count: number;
 };
 
+export type DayBucket = {
+  day: string;
+  count: number;
+};
+
+export type ProgressHistory = {
+  week: DayBucket[];
+  month: WeekBucket[];
+  quarter: WeekBucket[];
+};
+
+export type HistoryRange = "week" | "month" | "quarter";
+
 export type ProgressSnapshot = {
   problemsLogged: number;
   repsCompleted: number;
@@ -21,5 +34,5 @@ export type ProgressSnapshot = {
   totalReviews: number;
   difficulty: DifficultyCounts;
   patterns: NamedCount[];
-  history: WeekBucket[];
+  history: ProgressHistory;
 };

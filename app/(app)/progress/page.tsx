@@ -29,7 +29,7 @@ export default async function ProgressPage() {
             difficulty={snapshot.difficulty}
             patterns={snapshot.patterns}
           />
-          <ProgressHistory weeks={snapshot.history} />
+          <ProgressHistory history={snapshot.history} />
         </div>
       )}
     </div>

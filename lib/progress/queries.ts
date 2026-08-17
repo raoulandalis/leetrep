@@ -1,8 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import {
+  buildRepHistory,
   countByDifficulty,
   countByPattern,
-  repsByWeek,
 } from "@/lib/progress/aggregate";
 import type { ProgressSnapshot } from "@/lib/progress/types";
 import { todayYmd } from "@/lib/reviews/schedule";
@@ -16,7 +16,7 @@ function emptySnapshot(today: string): ProgressSnapshot {
     totalReviews: 0,
     difficulty: { Easy: 0, Medium: 0, Hard: 0 },
     patterns: [],
-    history: repsByWeek([], today),
+    history: buildRepHistory([], today),
   };
 }
 
@@ -107,7 +107,7 @@ export async function getProgressSnapshot(): Promise<{
       totalReviews: reviewRows.length,
       difficulty: countByDifficulty(problems),
       patterns: countByPattern(problems),
-      history: repsByWeek(completionYmds, today),
+      history: buildRepHistory(completionYmds, today),
     },
     error: null,
   };

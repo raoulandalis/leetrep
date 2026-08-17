@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import {
   countByDifficulty,
   countByPattern,
+  repsByDay,
   repsByWeek,
 } from "./aggregate.ts";
 
@@ -85,5 +86,32 @@ describe("repsByWeek", () => {
   it("ignores completions outside the 12-week window", () => {
     const weeks = repsByWeek(["2026-05-24"], "2026-08-17");
     assert.ok(weeks.every((week) => week.count === 0));
+  });
+
+  it("can return a 5-week month window ending with the current week", () => {
+    const weeks = repsByWeek([], "2026-08-17", 5);
+    assert.equal(weeks.length, 5);
+    assert.equal(weeks[0]?.weekStart, "2026-07-20");
+    assert.equal(weeks[4]?.weekStart, "2026-08-17");
+  });
+});
+
+describe("repsByDay", () => {
+  it("returns Monday through Sunday of the week that contains today", () => {
+    const days = repsByDay([], "2026-08-18");
+    assert.equal(days.length, 7);
+    assert.equal(days[0]?.day, "2026-08-17");
+    assert.equal(days[6]?.day, "2026-08-23");
+    assert.ok(days.every((day) => day.count === 0));
+  });
+
+  it("counts completions on each calendar day and ignores other weeks", () => {
+    const days = repsByDay(
+      ["2026-08-16", "2026-08-17", "2026-08-18", "2026-08-18"],
+      "2026-08-18"
+    );
+    assert.equal(days[0]?.count, 1);
+    assert.equal(days[1]?.count, 2);
+    assert.equal(days[2]?.count, 0);
   });
 });
