@@ -78,6 +78,7 @@ export async function createProblem(
   revalidatePath("/problems");
   revalidatePath(`/problems/${problem.id}`);
   revalidatePath("/dashboard");
+  revalidatePath("/progress");
   redirect("/problems");
 }
 
@@ -128,6 +129,7 @@ export async function updateProblem(
   revalidatePath("/problems");
   revalidatePath(`/problems/${id}`);
   revalidatePath("/dashboard");
+  revalidatePath("/progress");
   return { ok: true };
 }
 
@@ -163,5 +165,6 @@ export async function deleteProblem(id: string): Promise<ActionResult> {
   revalidatePath("/problems");
   revalidatePath(`/problems/${trimmed}`);
   revalidatePath("/dashboard");
+  revalidatePath("/progress");
   redirect("/problems");
 }

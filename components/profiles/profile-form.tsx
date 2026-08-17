@@ -93,7 +93,7 @@ export function ProfileForm({
 
       {state?.ok ? (
         <p className="text-sm text-asphalt/60" role="status">
-          Saved.
+          Profile saved.
         </p>
       ) : null}
 

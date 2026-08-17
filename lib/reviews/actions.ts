@@ -78,6 +78,7 @@ export async function completeReviewTask(id: string): Promise<ActionResult> {
   revalidatePath("/problems");
   revalidatePath(`/problems/${existing.problem_id}`);
   revalidatePath("/dashboard");
+  revalidatePath("/progress");
   revalidatePath(`/reviews/${trimmed}`);
   return { ok: true };
 }

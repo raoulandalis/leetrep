@@ -15,13 +15,14 @@ export default async function ProblemsPage() {
         <AddProblemLink />
       </header>
 
-      {problems.length === 0 ? (
+      {error ? (
+        <ErrorState description={error} />
+      ) : problems.length === 0 ? (
         <EmptyState
           title="No problems logged"
           description="Your solved LeetCode problems will show up here when you start adding them."
+          action={<AddProblemLink className="w-fit" />}
         />
-      ) : error ? (
-        <ErrorState description={error} />
       ) : (
         <ProblemList problems={problems} />
       )}
