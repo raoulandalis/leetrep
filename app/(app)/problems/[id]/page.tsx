@@ -6,6 +6,7 @@ import { JournalForm } from "@/components/journals/journal-form";
 import { DeleteProblemButton } from "@/components/problems/delete-problem-button";
 import { ProblemForm } from "@/components/problems/problem-form";
 import {
+  ConfidenceChip,
   DifficultyChip,
   PatternChip,
 } from "@/components/problems/problem-list";
@@ -65,6 +66,9 @@ export default async function ProblemDetailPage({
           </h1>
           <div className="flex flex-wrap items-center gap-2">
             <DifficultyChip difficulty={problem.difficulty} />
+            {problem.confidence ? (
+              <ConfidenceChip confidence={problem.confidence} onRail />
+            ) : null}
             {problem.patterns.map((tag) => (
               <PatternChip key={tag} label={tag} onRail />
             ))}
@@ -122,7 +126,7 @@ export default async function ProblemDetailPage({
           description={reviewError}
         />
       ) : (
-        <ReviewSchedule tasks={tasks} />
+        <ReviewSchedule tasks={tasks} confidence={problem.confidence} />
       )}
 
       <DeleteProblemButton problemId={problem.id} title={problem.title} />

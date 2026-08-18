@@ -2,21 +2,43 @@
 
 import { useActionState } from "react";
 import Link from "next/link";
+import { ConfidenceHelp } from "@/components/problems/confidence-help";
+import { confidenceTone } from "@/components/problems/problem-list";
 import { Button } from "@/components/ui/button";
-import { completeRepAction } from "@/lib/reviews/actions";
-import type { ActionResult } from "@/lib/problems/types";
+import { cn } from "@/lib/utils";
+import type { ActionResult, Confidence } from "@/lib/problems/types";
+import { CONFIDENCE_LEVELS } from "@/lib/problems/types";
+import {
+  completeRepAction,
+  updateProblemConfidenceAction,
+} from "@/lib/reviews/actions";
 
 const primaryCtaClass =
   "h-12 w-full max-w-md rounded-none bg-lane font-display text-base font-extrabold tracking-[0.12em] text-asphalt uppercase shadow-[0_10px_24px_rgb(15_23_32_/_28%)] transition-[transform,box-shadow,background-color] hover:bg-lane/90 active:translate-y-px disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lane focus-visible:ring-offset-2 focus-visible:ring-offset-asphalt";
 
-export function CompleteRepForm({ taskId }: { taskId: string }) {
+export function CompleteRepForm({
+  taskId,
+  problemId,
+  currentConfidence,
+}: {
+  taskId: string;
+  problemId: string;
+  currentConfidence: Confidence | null;
+}) {
   const [state, formAction, pending] = useActionState(
     completeRepAction,
     null as ActionResult | null
   );
 
   if (state?.ok) {
-    return <RepCompleteNotice />;
+    return (
+      <RepCompleteNotice
+        problemId={problemId}
+        taskId={taskId}
+        currentConfidence={currentConfidence}
+        cycleComplete={Boolean(state.cycleComplete)}
+      />
+    );
   }
 
   return (
@@ -36,8 +58,16 @@ export function CompleteRepForm({ taskId }: { taskId: string }) {
 
 export function RepCompleteNotice({
   completedAt,
+  problemId,
+  taskId,
+  currentConfidence,
+  cycleComplete = false,
 }: {
   completedAt?: string | null;
+  problemId?: string;
+  taskId?: string;
+  currentConfidence?: Confidence | null;
+  cycleComplete?: boolean;
 }) {
   return (
     <div className="flex flex-col gap-4 border border-steel-seam bg-lane-board p-6 sm:p-8">
@@ -53,8 +83,89 @@ export function RepCompleteNotice({
           This rep is done. Come back when the next one is due.
         </p>
       )}
+      {cycleComplete && problemId && taskId ? (
+        <CycleConfidenceForm
+          problemId={problemId}
+          taskId={taskId}
+          currentConfidence={currentConfidence ?? null}
+        />
+      ) : null}
       <DashboardLink />
     </div>
+  );
+}
+
+function CycleConfidenceForm({
+  problemId,
+  taskId,
+  currentConfidence,
+}: {
+  problemId: string;
+  taskId: string;
+  currentConfidence: Confidence | null;
+}) {
+  const [state, formAction, pending] = useActionState(
+    updateProblemConfidenceAction,
+    null as ActionResult | null
+  );
+
+  if (state?.ok) {
+    return (
+      <p className="text-sm leading-relaxed text-track-mist" role="status">
+        Saved.
+      </p>
+    );
+  }
+
+  return (
+    <form action={formAction} className="flex flex-col gap-3">
+      <input type="hidden" name="problem_id" value={problemId} />
+      <input type="hidden" name="review_id" value={taskId} />
+      <div className="flex items-center gap-2">
+        <p
+          id="cycle-confidence-label"
+          className="font-display text-xs font-bold tracking-[0.16em] text-track-mist uppercase"
+        >
+          How does this feel now?
+        </p>
+        <ConfidenceHelp onRail={false} />
+      </div>
+      <p className="text-sm leading-relaxed text-track-mist">
+        Needs work or Keep practicing starts another 5-rep cycle. Confident
+        leaves this off the queue. You can skip.
+      </p>
+      <div
+        role="group"
+        aria-labelledby="cycle-confidence-label"
+        className="grid grid-cols-1 gap-1 border border-steel-seam bg-lane-pit p-1 sm:grid-cols-3"
+      >
+        {CONFIDENCE_LEVELS.map((option) => {
+          const selected = currentConfidence === option;
+          return (
+            <button
+              key={option}
+              type="submit"
+              name="confidence"
+              value={option}
+              disabled={pending}
+              className={cn(
+                "font-display h-10 px-2 text-xs font-bold tracking-[0.06em] uppercase transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lane/60 sm:text-sm sm:tracking-[0.08em]",
+                selected
+                  ? confidenceTone(option)
+                  : "text-track-mist hover:text-rail"
+              )}
+            >
+              {option}
+            </button>
+          );
+        })}
+      </div>
+      {state && !state.ok ? (
+        <p className="text-sm text-destructive" role="alert">
+          {state.error}
+        </p>
+      ) : null}
+    </form>
   );
 }
 

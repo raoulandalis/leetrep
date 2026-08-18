@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { CompleteRepForm } from "@/components/reviews/complete-rep-form";
 import { JournalReveal } from "@/components/reviews/journal-reveal";
 import type { Journal } from "@/lib/journals/types";
+import type { Confidence } from "@/lib/problems/types";
 import { canRevealRecall } from "@/lib/reviews/rep";
 
 const textareaClass =
@@ -17,10 +18,12 @@ export function RecallRep({
   taskId,
   problemId,
   journal,
+  currentConfidence,
 }: {
   taskId: string;
   problemId: string;
   journal: Journal | null;
+  currentConfidence: Confidence | null;
 }) {
   const [recall, setRecall] = useState("");
   const [revealed, setRevealed] = useState(false);
@@ -71,7 +74,11 @@ export function RecallRep({
               <JournalReveal journal={journal} problemId={problemId} />
             </section>
           </div>
-          <CompleteRepForm taskId={taskId} />
+          <CompleteRepForm
+            taskId={taskId}
+            problemId={problemId}
+            currentConfidence={currentConfidence}
+          />
         </div>
       )}
     </div>

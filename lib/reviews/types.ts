@@ -1,4 +1,5 @@
 import type { Journal } from "@/lib/journals/types";
+import type { Confidence } from "@/lib/problems/types";
 
 export const REVIEW_TYPES = ["Recall", "Re-solve"] as const;
 
@@ -33,6 +34,7 @@ export type ReviewProblem = {
   difficulty: string;
   patterns: string[];
   leetcode_url: string;
+  confidence: Confidence | null;
 };
 
 export type DueReviewTask = ReviewTask & {
@@ -42,6 +44,7 @@ export type DueReviewTask = ReviewTask & {
 export type ReviewRep = ReviewTask & {
   problems: ReviewProblem | null;
   journal: Journal | null;
+  cycleComplete: boolean;
 };
 
 export type DashboardStats = {

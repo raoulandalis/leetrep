@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { Problem } from "@/lib/problems/types";
 
 const PROBLEM_COLUMNS =
-  "id, user_id, leetcode_url, title, difficulty, patterns, date_completed, created_at, updated_at";
+  "id, user_id, leetcode_url, title, difficulty, patterns, date_completed, confidence, created_at, updated_at";
 
 export async function listProblems(): Promise<{
   problems: Problem[];

@@ -3,10 +3,12 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { insertReviewSchedule } from "@/lib/reviews/persist";
-import { todayYmd } from "@/lib/reviews/schedule";
+import { syncReviewQueue, SCHEDULE_UPDATE_ERROR } from "@/lib/reviews/persist";
 import type { ActionResult } from "@/lib/problems/types";
-import { parseProblemForm } from "@/lib/problems/validation";
+import {
+  parseProblemForm,
+  parseStoredConfidence,
+} from "@/lib/problems/validation";
 
 async function requireUser() {
   const supabase = await createClient();
@@ -44,6 +46,7 @@ export async function createProblem(
       difficulty: parsed.value.difficulty,
       patterns: parsed.value.patterns,
       date_completed: parsed.value.date_completed,
+      confidence: parsed.value.confidence,
     })
     .select("id")
     .single();
@@ -55,11 +58,13 @@ export async function createProblem(
     };
   }
 
-  const { error: scheduleError } = await insertReviewSchedule({
+  const { error: scheduleError } = await syncReviewQueue({
     supabase,
     userId: user.id,
     problemId: problem.id,
-    day0: todayYmd(),
+    previous: null,
+    next: parsed.value.confidence,
+    restartCycle: false,
   });
 
   if (scheduleError) {
@@ -101,6 +106,24 @@ export async function updateProblem(
     return { ok: false, error: "You need to sign in to update a problem." };
   }
 
+  const { data: existing, error: existingError } = await supabase
+    .from("problems")
+    .select("id, confidence")
+    .eq("id", id)
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (existingError) {
+    return {
+      ok: false,
+      error: "Couldn't update this problem. Try again in a moment.",
+    };
+  }
+
+  if (!existing) {
+    return { ok: false, error: "Problem not found." };
+  }
+
   const { data, error } = await supabase
     .from("problems")
     .update({
@@ -109,6 +132,7 @@ export async function updateProblem(
       difficulty: parsed.value.difficulty,
       patterns: parsed.value.patterns,
       date_completed: parsed.value.date_completed,
+      confidence: parsed.value.confidence,
       updated_at: new Date().toISOString(),
     })
     .eq("id", id)
@@ -124,6 +148,20 @@ export async function updateProblem(
 
   if (!data?.length) {
     return { ok: false, error: "Problem not found." };
+  }
+
+  const { error: scheduleError } = await syncReviewQueue({
+    supabase,
+    userId: user.id,
+    problemId: id,
+    previous: parseStoredConfidence(existing.confidence),
+    next: parsed.value.confidence,
+    restartCycle: false,
+    errorMessage: SCHEDULE_UPDATE_ERROR,
+  });
+
+  if (scheduleError) {
+    return { ok: false, error: scheduleError };
   }
 
   revalidatePath("/problems");

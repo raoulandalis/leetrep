@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import type { Difficulty, Problem } from "@/lib/problems/types";
+import type { Confidence, Difficulty, Problem } from "@/lib/problems/types";
 import { DIFFICULTIES } from "@/lib/problems/types";
 import {
   formatCompletedDate,
@@ -145,6 +145,9 @@ export function ProblemList({ problems }: { problems: Problem[] }) {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <DifficultyChip difficulty={problem.difficulty} />
+                  {problem.confidence ? (
+                    <ConfidenceChip confidence={problem.confidence} />
+                  ) : null}
                   {problem.patterns.map((tag) => (
                     <PatternChip key={tag} label={tag} />
                   ))}
@@ -174,6 +177,37 @@ export function DifficultyChip({ difficulty }: { difficulty: Difficulty }) {
       )}
     >
       {difficulty}
+    </span>
+  );
+}
+
+export function confidenceTone(confidence: Confidence) {
+  return confidence === "Confident"
+    ? "bg-lane/15 text-lane"
+    : confidence === "Keep practicing"
+      ? "bg-cobalt/15 text-cobalt"
+      : "bg-signal/15 text-signal";
+}
+
+export function ConfidenceChip({
+  confidence,
+  onRail = false,
+}: {
+  confidence: Confidence;
+  onRail?: boolean;
+}) {
+  const tone = onRail
+    ? "border border-asphalt/20 text-asphalt/60"
+    : confidenceTone(confidence);
+
+  return (
+    <span
+      className={cn(
+        "font-display px-2 py-0.5 text-xs font-bold tracking-[0.16em] uppercase",
+        tone
+      )}
+    >
+      {confidence}
     </span>
   );
 }

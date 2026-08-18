@@ -15,7 +15,7 @@ const barlowCondensed = Barlow_Condensed({
 });
 
 export const metadata: Metadata = {
-  title: "LeetRep — Remember what you solve",
+  title: "LeetRep | Remember what you solve",
   description:
     "Log LeetCode problems, journal why they work, and return on a spaced schedule with recall and re-solve reps.",
 };

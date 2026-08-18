@@ -1,13 +1,25 @@
-import {
-  DIFFICULTIES,
-  type Difficulty,
-  type FieldErrors,
-  type Problem,
-  type ProblemInput,
-} from "@/lib/problems/types";
+import type {
+  Confidence,
+  Difficulty,
+  FieldErrors,
+  Problem,
+  ProblemInput,
+} from "./types";
 
 export function isDifficulty(value: string): value is Difficulty {
-  return (DIFFICULTIES as readonly string[]).includes(value);
+  return value === "Easy" || value === "Medium" || value === "Hard";
+}
+
+export function isConfidence(value: string): value is Confidence {
+  return (
+    value === "Needs work" ||
+    value === "Keep practicing" ||
+    value === "Confident"
+  );
+}
+
+export function parseStoredConfidence(value: unknown): Confidence | null {
+  return typeof value === "string" && isConfidence(value) ? value : null;
 }
 
 export function parsePatterns(raw: string): string[] {
@@ -52,6 +64,7 @@ export function parseProblemForm(
   const title = String(formData.get("title") ?? "").trim();
   const leetcode_url = String(formData.get("leetcode_url") ?? "").trim();
   const difficultyRaw = String(formData.get("difficulty") ?? "").trim();
+  const confidenceRaw = String(formData.get("confidence") ?? "").trim();
   const patternsRaw = String(formData.get("patterns") ?? "");
   const dateRaw = String(formData.get("date_completed") ?? "").trim();
 
@@ -79,6 +92,10 @@ export function parseProblemForm(
     fieldErrors.difficulty = "Choose Easy, Medium, or Hard.";
   }
 
+  if (!isConfidence(confidenceRaw)) {
+    fieldErrors.confidence = "Choose how this problem feels.";
+  }
+
   let date_completed: string | null = null;
   if (dateRaw) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(dateRaw)) {
@@ -104,6 +121,7 @@ export function parseProblemForm(
       difficulty: difficultyRaw as Difficulty,
       patterns: parsePatterns(patternsRaw),
       date_completed,
+      confidence: confidenceRaw as Confidence,
     },
   };
 }

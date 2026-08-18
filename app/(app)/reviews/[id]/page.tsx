@@ -71,7 +71,13 @@ export default async function ReviewRepPage({
         problem={rep.problems}
         reviewType={rep.review_type}
       >
-        <RepCompleteNotice completedAt={rep.completed_at} />
+        <RepCompleteNotice
+          completedAt={rep.completed_at}
+          problemId={rep.problem_id}
+          taskId={rep.id}
+          currentConfidence={rep.problems?.confidence ?? null}
+          cycleComplete={rep.cycleComplete}
+        />
       </RepShell>
     );
   }
@@ -91,11 +97,14 @@ export default async function ReviewRepPage({
           taskId={rep.id}
           problemId={rep.problem_id}
           journal={rep.journal}
+          currentConfidence={rep.problems?.confidence ?? null}
         />
       ) : (
         <ResolveRep
           taskId={rep.id}
+          problemId={rep.problem_id}
           leetcodeUrl={rep.problems?.leetcode_url ?? null}
+          currentConfidence={rep.problems?.confidence ?? null}
         />
       )}
     </RepShell>

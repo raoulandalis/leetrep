@@ -2,9 +2,11 @@
 
 import { useActionState, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
+import { ConfidenceHelp } from "@/components/problems/confidence-help";
+import { confidenceTone } from "@/components/problems/problem-list";
 import { cn } from "@/lib/utils";
-import type { ActionResult, Difficulty, Problem } from "@/lib/problems/types";
-import { DIFFICULTIES } from "@/lib/problems/types";
+import type { ActionResult, Confidence, Difficulty, Problem } from "@/lib/problems/types";
+import { CONFIDENCE_LEVELS, DIFFICULTIES } from "@/lib/problems/types";
 import { patternsToInput } from "@/lib/problems/validation";
 
 const fieldClass =
@@ -33,6 +35,9 @@ export function ProblemForm({
   const [difficulty, setDifficulty] = useState<Difficulty>(
     problem?.difficulty ?? "Easy"
   );
+  const [confidence, setConfidence] = useState<Confidence | "">(
+    problem?.confidence ?? ""
+  );
 
   const fieldErrors = state && !state.ok ? state.fieldErrors : undefined;
 
@@ -40,6 +45,7 @@ export function ProblemForm({
     <form action={formAction} className="flex flex-col gap-6">
       {problem ? <input type="hidden" name="id" value={problem.id} /> : null}
       <input type="hidden" name="difficulty" value={difficulty} />
+      <input type="hidden" name="confidence" value={confidence} />
 
       <Field
         id="leetcode_url"
@@ -110,6 +116,55 @@ export function ProblemForm({
             {fieldErrors.difficulty}
           </p>
         ) : null}
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <p id="confidence-label" className={labelClass}>
+            Confidence
+          </p>
+          <ConfidenceHelp />
+        </div>
+        <div
+          role="radiogroup"
+          aria-labelledby="confidence-label"
+          aria-required="true"
+          aria-describedby={
+            fieldErrors?.confidence ? "confidence-error" : "confidence-hint"
+          }
+          className="grid grid-cols-1 gap-1 border border-asphalt/15 bg-asphalt/5 p-1 sm:grid-cols-3"
+        >
+          {CONFIDENCE_LEVELS.map((option) => {
+            const selected = confidence === option;
+            return (
+              <button
+                key={option}
+                type="button"
+                role="radio"
+                aria-checked={selected}
+                onClick={() => setConfidence(option)}
+                className={cn(
+                  "font-display h-10 px-2 text-xs font-bold tracking-[0.06em] uppercase transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lane/60 sm:text-sm sm:tracking-[0.08em]",
+                  selected
+                    ? confidenceTone(option)
+                    : "text-asphalt/55 hover:text-asphalt"
+                )}
+              >
+                {option}
+              </button>
+            );
+          })}
+        </div>
+        {fieldErrors?.confidence ? (
+          <p id="confidence-error" className="text-sm text-destructive" role="alert">
+            {fieldErrors.confidence}
+          </p>
+        ) : (
+          <p id="confidence-hint" className="text-sm text-asphalt/55">
+            Confident skips the review queue. The other two add this problem to
+            Today&apos;s Reps.
+          </p>
+        )}
       </div>
 
       <Field

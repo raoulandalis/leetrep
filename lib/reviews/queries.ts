@@ -1,4 +1,5 @@
 import { getJournal } from "@/lib/journals/queries";
+import { parseStoredConfidence } from "@/lib/problems/validation";
 import { createClient } from "@/lib/supabase/server";
 import { todayYmd } from "@/lib/reviews/schedule";
 import { dayStreak } from "@/lib/reviews/streak";
@@ -19,7 +20,7 @@ const EMPTY_DASHBOARD_STATS: DashboardStats = {
 const REVIEW_COLUMNS =
   "id, user_id, problem_id, review_type, scheduled_for, completed_at, created_at";
 
-const DUE_REVIEW_COLUMNS = `${REVIEW_COLUMNS}, problems(title, difficulty, patterns, leetcode_url)`;
+const DUE_REVIEW_COLUMNS = `${REVIEW_COLUMNS}, problems(title, difficulty, patterns, leetcode_url, confidence)`;
 
 export async function listReviewTasksForProblem(problemId: string): Promise<{
   tasks: ReviewTask[];
@@ -210,7 +211,24 @@ function unwrapProblem(related: unknown): ReviewProblem | null {
     return null;
   }
 
-  return problem as ReviewProblem;
+  const row = problem as {
+    title?: unknown;
+    difficulty?: unknown;
+    patterns?: unknown;
+    leetcode_url?: unknown;
+    confidence?: unknown;
+  };
+
+  return {
+    title: typeof row.title === "string" ? row.title : "",
+    difficulty: typeof row.difficulty === "string" ? row.difficulty : "",
+    patterns: Array.isArray(row.patterns)
+      ? row.patterns.filter((tag): tag is string => typeof tag === "string")
+      : [],
+    leetcode_url:
+      typeof row.leetcode_url === "string" ? row.leetcode_url : "",
+    confidence: parseStoredConfidence(row.confidence),
+  };
 }
 
 export async function getReviewRep(id: string): Promise<{
@@ -254,6 +272,20 @@ export async function getReviewRep(id: string): Promise<{
     return { rep: null, error: journalError };
   }
 
+  const { count: incompleteCount, error: incompleteError } = await supabase
+    .from("review_tasks")
+    .select("id", { count: "exact", head: true })
+    .eq("problem_id", data.problem_id)
+    .eq("user_id", user.id)
+    .is("completed_at", null);
+
+  if (incompleteError) {
+    return {
+      rep: null,
+      error: "Couldn't load this rep. Try again in a moment.",
+    };
+  }
+
   return {
     rep: {
       id: data.id,
@@ -265,6 +297,7 @@ export async function getReviewRep(id: string): Promise<{
       created_at: data.created_at,
       problems: unwrapProblem(data.problems),
       journal,
+      cycleComplete: (incompleteCount ?? 0) === 0,
     },
     error: null,
   };
