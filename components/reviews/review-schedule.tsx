@@ -1,10 +1,11 @@
 import Link from "next/link";
-import { cn } from "@/lib/utils";
 import { ReviewTypeChip } from "@/components/reviews/review-type-chip";
+import type { Confidence } from "@/lib/problems/types";
+import { formatCompletedDate } from "@/lib/problems/validation";
 import { canStartRep } from "@/lib/reviews/rep";
 import { taskStatus, todayYmd } from "@/lib/reviews/schedule";
 import type { ReviewStatus, ReviewTask } from "@/lib/reviews/types";
-import { formatCompletedDate } from "@/lib/problems/validation";
+import { cn } from "@/lib/utils";
 
 const STATUS_LABEL: Record<ReviewStatus, string> = {
   upcoming: "Upcoming",
@@ -26,7 +27,13 @@ function statusTone(status: ReviewStatus) {
   }
 }
 
-export function ReviewSchedule({ tasks }: { tasks: ReviewTask[] }) {
+export function ReviewSchedule({
+  tasks,
+  confidence,
+}: {
+  tasks: ReviewTask[];
+  confidence: Confidence | null;
+}) {
   const today = todayYmd();
 
   return (
@@ -41,7 +48,9 @@ export function ReviewSchedule({ tasks }: { tasks: ReviewTask[] }) {
 
       {tasks.length === 0 ? (
         <p className="text-sm leading-relaxed text-track-mist">
-          No review dates yet. Open this problem again in a moment.
+          {confidence === "Confident"
+            ? "You're not reviewing this one. Change confidence to add it to the queue."
+            : "No review dates yet. Open this problem again in a moment."}
         </p>
       ) : (
         <ol className="flex flex-col divide-y divide-steel-seam border-t border-steel-seam">

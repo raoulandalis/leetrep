@@ -1,12 +1,17 @@
 import { ExternalLink } from "lucide-react";
 import { CompleteRepForm } from "@/components/reviews/complete-rep-form";
+import type { Confidence } from "@/lib/problems/types";
 
 export function ResolveRep({
   taskId,
+  problemId,
   leetcodeUrl,
+  currentConfidence,
 }: {
   taskId: string;
+  problemId: string;
   leetcodeUrl: string | null;
+  currentConfidence: Confidence | null;
 }) {
   return (
     <div className="flex flex-col gap-8">
@@ -34,7 +39,11 @@ export function ResolveRep({
         <p className="font-display text-xs font-bold tracking-[0.16em] text-track-mist uppercase">
           When you&apos;re finished
         </p>
-        <CompleteRepForm taskId={taskId} />
+        <CompleteRepForm
+          taskId={taskId}
+          problemId={problemId}
+          currentConfidence={currentConfidence}
+        />
       </div>
     </div>
   );
