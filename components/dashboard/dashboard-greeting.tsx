@@ -13,7 +13,7 @@ export function DashboardGreeting({
   const hello = firstName ? `Good ${period}, ${firstName}.` : `Good ${period}.`;
 
   return (
-    <header className="flex flex-col gap-2">
+    <header id="onborda-greeting" className="flex flex-col gap-2">
       <p
         className="font-display text-3xl font-extrabold tracking-tight text-rail uppercase"
         suppressHydrationWarning

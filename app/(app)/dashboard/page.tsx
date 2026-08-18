@@ -37,10 +37,13 @@ export default async function DashboardPage() {
       <DashboardGreeting firstName={firstName} dueCount={tasks.length} />
       <DashboardStats stats={stats} />
 
-      <section className="flex flex-col gap-6">
-        <h1 className="font-display text-3xl font-extrabold tracking-tight text-rail uppercase">
-          Today&apos;s Reps
-        </h1>
+      <section id="onborda-todays-reps" className="flex flex-col gap-6">
+        <header className="flex flex-wrap items-end justify-between gap-4">
+          <h1 className="font-display text-3xl font-extrabold tracking-tight text-rail uppercase">
+            Today&apos;s Reps
+          </h1>
+          <AddProblemLink id="onborda-add-problem" />
+        </header>
 
         {error ? (
           <ErrorState description={error} />

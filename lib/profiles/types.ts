@@ -1,6 +1,7 @@
 export type Profile = {
   first_name: string | null;
   last_name: string | null;
+  onboarding_completed_at: string | null;
 };
 
 export type ProfileInput = {

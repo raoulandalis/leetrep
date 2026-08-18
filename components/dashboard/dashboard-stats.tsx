@@ -11,7 +11,10 @@ const STAT_ITEMS: Array<{
 
 export function DashboardStats({ stats }: { stats: DashboardStatsData }) {
   return (
-    <dl className="grid grid-cols-3 divide-x divide-steel-seam border border-steel-seam bg-lane-board">
+    <dl
+      id="onborda-stats"
+      className="grid grid-cols-3 divide-x divide-steel-seam border border-steel-seam bg-lane-board"
+    >
       {STAT_ITEMS.map((item) => (
         <div key={item.key} className="flex flex-col gap-1 px-4 py-4 sm:px-5">
           <dt className="font-display text-xs font-bold tracking-[0.16em] text-track-mist uppercase">

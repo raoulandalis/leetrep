@@ -8,7 +8,10 @@ export default async function ProblemsPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <header className="flex flex-wrap items-end justify-between gap-4">
+      <header
+        id="onborda-problems"
+        className="flex flex-wrap items-end justify-between gap-4"
+      >
         <h1 className="font-display text-3xl font-extrabold tracking-tight text-rail uppercase">
           Problems
         </h1>

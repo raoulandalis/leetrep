@@ -16,7 +16,7 @@ export async function getProfile(): Promise<{
 
   const { data, error } = await supabase
     .from("profiles")
-    .select("first_name, last_name")
+    .select("first_name, last_name, onboarding_completed_at")
     .eq("user_id", user.id)
     .maybeSingle();
 
@@ -32,8 +32,13 @@ export async function getProfile(): Promise<{
       ? {
           first_name: data.first_name,
           last_name: data.last_name,
+          onboarding_completed_at: data.onboarding_completed_at,
         }
-      : { first_name: null, last_name: null },
+      : {
+          first_name: null,
+          last_name: null,
+          onboarding_completed_at: null,
+        },
     error: null,
   };
 }

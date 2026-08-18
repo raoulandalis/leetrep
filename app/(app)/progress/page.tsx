@@ -10,7 +10,10 @@ export default async function ProgressPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <h1 className="font-display text-3xl font-extrabold tracking-tight text-rail uppercase">
+      <h1
+        id="onborda-progress"
+        className="font-display text-3xl font-extrabold tracking-tight text-rail uppercase"
+      >
         Progress
       </h1>
 

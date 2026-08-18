@@ -59,3 +59,32 @@ export async function updateProfile(
   revalidatePath("/", "layout");
   return { ok: true };
 }
+
+export async function completeOnboardingTour(): Promise<ProfileActionResult> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { ok: false, error: "You need to sign in to update your profile." };
+  }
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({
+      onboarding_completed_at: new Date().toISOString(),
+    })
+    .eq("user_id", user.id)
+    .is("onboarding_completed_at", null);
+
+  if (error) {
+    return {
+      ok: false,
+      error: "Couldn't save your profile. Try again in a moment.",
+    };
+  }
+
+  revalidatePath("/", "layout");
+  return { ok: true };
+}

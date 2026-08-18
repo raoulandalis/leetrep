@@ -8,12 +8,18 @@ const ADD_PROBLEM_CLASS =
 export function AddProblemLink({
   className,
   children = "+ Add Problem",
+  id,
 }: {
   className?: string;
   children?: ReactNode;
+  id?: string;
 }) {
   return (
-    <Link href="/problems/new" className={cn(ADD_PROBLEM_CLASS, className)}>
+    <Link
+      id={id}
+      href="/problems/new"
+      className={cn(ADD_PROBLEM_CLASS, className)}
+    >
       {children}
     </Link>
   );
