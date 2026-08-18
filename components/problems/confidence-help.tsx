@@ -28,7 +28,7 @@ export function ConfidenceHelp({
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <div className="group relative">
+    <div className="relative inline-flex">
       <button
         ref={buttonRef}
         type="button"
@@ -40,7 +40,7 @@ export function ConfidenceHelp({
           }
         }}
         className={cn(
-          "inline-flex size-6 items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lane/60",
+          "peer inline-flex size-6 items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lane/60",
           onRail
             ? "text-asphalt/55 hover:text-asphalt"
             : "text-track-mist hover:text-rail"
@@ -52,7 +52,7 @@ export function ConfidenceHelp({
         id={tooltipId}
         role="tooltip"
         className={cn(
-          "pointer-events-none invisible absolute top-[calc(100%+0.5rem)] left-0 z-20 w-72 border p-4 opacity-0 shadow-[0_10px_24px_rgb(15_23_32_/_28%)] transition-[opacity,visibility] group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 sm:w-80",
+          "pointer-events-none invisible absolute top-[calc(100%+0.5rem)] left-0 z-20 w-72 border p-4 opacity-0 shadow-[0_10px_24px_rgb(15_23_32_/_28%)] transition-[opacity,visibility] peer-hover:visible peer-hover:opacity-100 peer-focus-visible:visible peer-focus-visible:opacity-100 sm:w-80",
           onRail
             ? "border-asphalt/20 bg-asphalt text-rail"
             : "border-steel-seam bg-rail text-asphalt"
