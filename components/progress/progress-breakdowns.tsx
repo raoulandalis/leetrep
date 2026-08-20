@@ -1,7 +1,7 @@
 import type { DifficultyCounts, NamedCount } from "@/lib/progress/types";
-import { DIFFICULTIES } from "@/lib/problems/types";
 import { PatternHelp } from "@/components/progress/pattern-help";
 import { PatternPieChart } from "@/components/progress/pattern-pie-chart";
+import { DifficultyBarChart } from "@/components/progress/difficulty-bar-chart";
 
 export function ProgressBreakdowns({
   difficulty,
@@ -11,30 +11,16 @@ export function ProgressBreakdowns({
   patterns: NamedCount[];
 }) {
   return (
-    <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-10">
-      <section className="flex flex-col gap-4">
-        <h2 className="font-display text-xl font-extrabold tracking-tight text-rail uppercase">
+    <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:items-stretch md:gap-10">
+      <section className="flex h-full min-h-0 flex-col gap-4">
+        <h2 className="flex min-h-8 items-center font-display text-xl font-extrabold tracking-tight text-rail uppercase">
           Difficulty
         </h2>
-        <dl className="border border-steel-seam bg-lane-board">
-          {DIFFICULTIES.map((name) => (
-            <div
-              key={name}
-              className="flex items-baseline justify-between gap-4 border-b border-steel-seam px-4 py-3 last:border-b-0"
-            >
-              <dt className="font-display text-sm font-bold tracking-[0.12em] text-track-mist uppercase">
-                {name}
-              </dt>
-              <dd className="font-display text-2xl font-extrabold tracking-tight text-rail">
-                {difficulty[name]}
-              </dd>
-            </div>
-          ))}
-        </dl>
+        <DifficultyBarChart difficulty={difficulty} />
       </section>
 
-      <section className="flex flex-col gap-4">
-        <div className="flex items-center gap-2">
+      <section className="flex h-full min-h-0 flex-col gap-4">
+        <div className="flex min-h-8 items-center gap-2">
           <h2 className="font-display text-xl font-extrabold tracking-tight text-rail uppercase">
             Patterns
           </h2>

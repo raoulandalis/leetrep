@@ -16,8 +16,8 @@ export function PatternPieChart({ patterns }: { patterns: NamedCount[] }) {
   }));
 
   return (
-    <div className="border border-steel-seam bg-lane-board p-5 sm:p-6">
-      <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-8">
+    <div className="flex h-full min-h-44 flex-1 flex-col border border-steel-seam bg-lane-board p-5 sm:p-6">
+      <div className="flex flex-1 flex-col gap-6 sm:flex-row sm:items-center sm:gap-8">
         <div className="mx-auto size-44 shrink-0 sm:mx-0 sm:size-48">
           <ClientChart className="size-full">
             <PieChart>

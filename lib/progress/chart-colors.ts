@@ -11,6 +11,8 @@ export const PATTERN_SLICE_COLORS = [
 ] as const;
 
 export const CHART_LANE = "#36d9a0";
+export const CHART_SIGNAL = "#ff5a1f";
+export const CHART_COBALT = "#3d7eff";
 export const CHART_RAIL = "#f4f1ec";
 export const CHART_MIST = "#9aa3ad";
 export const CHART_SEAM = "#2a3544";
