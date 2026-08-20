@@ -132,6 +132,13 @@ function RecallQuiz({
     setStepIndex((current) => current + 1);
   }
 
+  function retry() {
+    setStepIndex(0);
+    setAnswers({});
+    setTextDraft("");
+    setComplexityDraft({});
+  }
+
   return (
     <div className="flex flex-col gap-8">
       <p className="max-w-xl text-base leading-relaxed text-rail/85">
@@ -286,6 +293,17 @@ function RecallQuiz({
             taskId={taskId}
             problemId={problemId}
             currentConfidence={currentConfidence}
+            leading={
+              steps.length > 0 ? (
+                <Button
+                  type="button"
+                  className={cn(revealCtaClass, "w-full min-w-0")}
+                  onClick={retry}
+                >
+                  Retry
+                </Button>
+              ) : null
+            }
           />
         </div>
       ) : null}

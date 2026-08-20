@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, type ReactNode } from "react";
 import Link from "next/link";
 import { ConfidenceHelp } from "@/components/problems/confidence-help";
 import { confidenceTone } from "@/components/problems/problem-list";
@@ -20,10 +20,12 @@ export function CompleteRepForm({
   taskId,
   problemId,
   currentConfidence,
+  leading,
 }: {
   taskId: string;
   problemId: string;
   currentConfidence: Confidence | null;
+  leading?: ReactNode;
 }) {
   const [state, formAction, pending] = useActionState(
     completeRepAction,
@@ -42,17 +44,33 @@ export function CompleteRepForm({
   }
 
   return (
-    <form action={formAction} className="flex flex-col gap-3">
-      <input type="hidden" name="id" value={taskId} />
+    <div className="flex flex-col gap-3">
       {state && !state.ok ? (
         <p className="text-sm text-destructive" role="alert">
           {state.error}
         </p>
       ) : null}
-      <Button type="submit" disabled={pending} className={primaryCtaClass}>
-        {pending ? "Completing..." : "Complete Rep"}
-      </Button>
-    </form>
+      <div
+        className={
+          leading ? "flex w-full flex-row gap-3" : undefined
+        }
+      >
+        {leading ? <div className="min-w-0 flex-1">{leading}</div> : null}
+        <form
+          action={formAction}
+          className={leading ? "min-w-0 flex-1" : undefined}
+        >
+          <input type="hidden" name="id" value={taskId} />
+          <Button
+            type="submit"
+            disabled={pending}
+            className={cn(primaryCtaClass, leading && "max-w-none")}
+          >
+            {pending ? "Completing..." : "Complete Rep"}
+          </Button>
+        </form>
+      </div>
+    </div>
   );
 }
 
