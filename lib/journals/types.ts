@@ -9,6 +9,7 @@ export type Journal = {
   space_complexity: string | null;
   struggles: string | null;
   additional_notes: string | null;
+  solution_code: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -21,6 +22,7 @@ export type JournalInput = {
   space_complexity: string | null;
   struggles: string | null;
   additional_notes: string | null;
+  solution_code: string | null;
 };
 
 export const COMPLEXITY_OPTIONS = [

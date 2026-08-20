@@ -18,6 +18,7 @@ function notes(
       | "space_complexity"
       | "struggles"
       | "additional_notes"
+      | "solution_code"
     >
   > = {}
 ) {
@@ -29,6 +30,7 @@ function notes(
     space_complexity: null,
     struggles: null,
     additional_notes: null,
+    solution_code: null,
     ...overrides,
   };
 }
@@ -66,5 +68,9 @@ describe("journalHasContent", () => {
     assert.equal(journalHasContent(notes({ approach: "two pointers" })), true);
     assert.equal(journalHasContent(notes({ key_insight: "seen set" })), true);
     assert.equal(journalHasContent(notes({ time_complexity: "O(n)" })), true);
+    assert.equal(
+      journalHasContent(notes({ solution_code: "def twoSum():\n    pass\n" })),
+      true
+    );
   });
 });

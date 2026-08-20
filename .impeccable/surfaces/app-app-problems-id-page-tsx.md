@@ -14,10 +14,10 @@ Operate. Route: `/problems/[id]` (`app/(app)/problems/[id]/page.tsx`, `component
 A signed-in developer opening a logged problem. Success: I know the problem, then I write. The journal is the learning resource; metadata is admin.
 
 ## Direction
-Journal Board on this page: clipboard is the problem, notebook is the journal. Always stacked, every breakpoint: rail clipboard (identity + collapsed Edit problem) → lane-board notebook (textareas as the main act, complexity as a pair, Save Journal as a trailing stamp — not a twin of Save changes) → delete.
+Journal Board on this page: clipboard is the problem, notebook is the journal. Always stacked, every breakpoint: rail clipboard (identity + collapsed Edit problem) → lane-board notebook (optional solution paste above own-words fields, complexity as a pair, Save Journal as a trailing stamp — not a twin of Save changes) → delete.
 
 ## Must keep
-- Seven journal fields, labels, save/upsert, no autosave
+- Journal fields including optional My Solution code paste above My Approach, labels, save/upsert, no autosave
 - Existing ProblemForm inside a collapsed disclosure
 - App shell, list, add-problem form
 - Sharp seams, Barlow pair, three-lane accents, Rail Ink Rule

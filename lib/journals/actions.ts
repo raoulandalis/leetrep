@@ -63,6 +63,7 @@ export async function saveJournal(
         space_complexity: parsed.value.space_complexity,
         struggles: parsed.value.struggles,
         additional_notes: parsed.value.additional_notes,
+        solution_code: parsed.value.solution_code,
         updated_at: new Date().toISOString(),
       },
       { onConflict: "problem_id" }

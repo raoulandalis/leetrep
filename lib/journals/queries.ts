@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { Journal } from "@/lib/journals/types";
 
 const JOURNAL_COLUMNS =
-  "id, problem_id, user_id, approach, key_insight, why_it_works, time_complexity, space_complexity, struggles, additional_notes, created_at, updated_at";
+  "id, problem_id, user_id, approach, key_insight, why_it_works, time_complexity, space_complexity, struggles, additional_notes, solution_code, created_at, updated_at";
 
 export async function getJournal(problemId: string): Promise<{
   journal: Journal | null;

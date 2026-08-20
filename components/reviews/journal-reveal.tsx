@@ -39,8 +39,8 @@ export function JournalReveal({
   return (
     <dl className="flex flex-col gap-5">
       {visibleFields.map((field) => {
-        const value = journal?.[field.name]?.trim();
-        if (!value) {
+        const value = journal?.[field.name];
+        if (!value || !value.trim()) {
           return null;
         }
 
@@ -49,8 +49,21 @@ export function JournalReveal({
             <dt className="font-display text-xs font-bold tracking-[0.16em] text-track-mist uppercase">
               {field.label}
             </dt>
-            <dd className="whitespace-pre-wrap text-sm leading-relaxed text-rail">
-              {value}
+            <dd>
+              {field.kind === "code" ? (
+                <pre
+                  className="overflow-x-auto border border-steel-seam bg-lane-pit px-3 py-3"
+                  style={{ tabSize: 4 }}
+                >
+                  <code className="font-mono text-sm leading-relaxed text-rail whitespace-pre">
+                    {value}
+                  </code>
+                </pre>
+              ) : (
+                <p className="whitespace-pre-wrap text-sm leading-relaxed text-rail">
+                  {value.trim()}
+                </p>
+              )}
             </dd>
           </div>
         );

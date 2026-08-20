@@ -19,6 +19,7 @@ function notes(
       | "space_complexity"
       | "struggles"
       | "additional_notes"
+      | "solution_code"
     >
   > = {}
 ) {
@@ -30,6 +31,7 @@ function notes(
     space_complexity: null,
     struggles: null,
     additional_notes: null,
+    solution_code: null,
     ...overrides,
   };
 }
@@ -144,6 +146,13 @@ describe("recallPromptSteps", () => {
       []
     );
   });
+
+  it("does not quiz on pasted solution code", () => {
+    assert.deepEqual(
+      recallPromptSteps(notes({ solution_code: "def twoSum():\n    pass\n" })),
+      []
+    );
+  });
 });
 
 describe("recallCodaFields", () => {
@@ -162,6 +171,13 @@ describe("recallCodaFields", () => {
         })
       ),
       ["struggles", "additional_notes"]
+    );
+  });
+
+  it("includes solution code in coda when present", () => {
+    assert.deepEqual(
+      recallCodaFields(notes({ solution_code: "def twoSum():\n    pass\n" })),
+      ["solution_code"]
     );
   });
 

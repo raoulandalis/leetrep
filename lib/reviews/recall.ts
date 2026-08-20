@@ -5,7 +5,10 @@ export { fieldHasContent };
 
 export type RecallTextField = "approach" | "key_insight" | "why_it_works";
 export type RecallComplexityField = "time_complexity" | "space_complexity";
-export type RecallCodaField = "struggles" | "additional_notes";
+export type RecallCodaField =
+  | "solution_code"
+  | "struggles"
+  | "additional_notes";
 
 export type RecallPromptStep =
   | { kind: "text"; field: RecallTextField; prompt: string }
@@ -32,7 +35,11 @@ const COMPLEXITY_FIELDS: RecallComplexityField[] = [
   "space_complexity",
 ];
 
-const CODA_FIELDS: RecallCodaField[] = ["struggles", "additional_notes"];
+const CODA_FIELDS: RecallCodaField[] = [
+  "solution_code",
+  "struggles",
+  "additional_notes",
+];
 
 function complexityPrompt(fields: RecallComplexityField[]): string {
   const hasTime = fields.includes("time_complexity");

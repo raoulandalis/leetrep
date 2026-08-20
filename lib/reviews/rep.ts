@@ -9,6 +9,7 @@ const JOURNAL_NOTE_KEYS = [
   "space_complexity",
   "struggles",
   "additional_notes",
+  "solution_code",
 ] as const;
 
 export type JournalNotes = Pick<Journal, (typeof JOURNAL_NOTE_KEYS)[number]>;

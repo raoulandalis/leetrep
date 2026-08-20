@@ -5,11 +5,17 @@ import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Journal } from "@/lib/journals/types";
 import { COMPLEXITY_OPTIONS, isComplexity } from "@/lib/journals/types";
-import { JOURNAL_FIELDS } from "@/lib/journals/validation";
+import {
+  JOURNAL_FIELDS,
+  SOLUTION_CODE_MAX_LENGTH,
+} from "@/lib/journals/validation";
 import type { ActionResult } from "@/lib/problems/types";
 
 const textareaClass =
   "min-h-36 w-full resize-y rounded-none border border-steel-seam bg-lane-pit px-3 py-3 text-sm leading-relaxed text-rail outline-none transition-[border-color,box-shadow] placeholder:text-track-mist focus-visible:border-rail focus-visible:ring-2 focus-visible:ring-lane/60";
+
+const codeTextareaClass =
+  "min-h-52 w-full resize-y overflow-x-auto rounded-none border border-steel-seam bg-lane-pit px-3 py-3 font-mono text-sm leading-relaxed text-rail outline-none transition-[border-color,box-shadow] placeholder:text-track-mist focus-visible:border-rail focus-visible:ring-2 focus-visible:ring-lane/60";
 
 const selectClass =
   "h-11 w-full appearance-none rounded-none border border-steel-seam bg-lane-pit px-3 pr-10 text-sm text-rail outline-none transition-[border-color,box-shadow] focus-visible:border-rail focus-visible:ring-2 focus-visible:ring-lane/60";
@@ -17,6 +23,7 @@ const selectClass =
 const labelClass =
   "font-display text-xs font-bold tracking-[0.16em] text-rail uppercase";
 
+const codeField = JOURNAL_FIELDS.find((field) => field.kind === "code");
 const explanationBefore = JOURNAL_FIELDS.filter(
   (field) =>
     field.kind === "textarea" &&
@@ -41,10 +48,38 @@ type JournalFormProps = {
 
 export function JournalForm({ problemId, journal, action }: JournalFormProps) {
   const [state, formAction, pending] = useActionState(action, null);
+  const codeHintId = codeField ? `${codeField.name}-hint` : undefined;
 
   return (
     <form action={formAction} className="flex flex-col gap-7">
       <input type="hidden" name="problem_id" value={problemId} />
+
+      {codeField ? (
+        <Field id={codeField.name} label={codeField.label}>
+          <p
+            id={codeHintId}
+            className="max-w-xl text-sm leading-relaxed text-track-mist"
+          >
+            Optional. Paste what you submitted — for later comparison, not a
+            substitute for writing the approach.
+          </p>
+          <textarea
+            id={codeField.name}
+            name={codeField.name}
+            defaultValue={journal?.[codeField.name] ?? ""}
+            placeholder={codeField.placeholder}
+            spellCheck={false}
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            wrap="off"
+            maxLength={SOLUTION_CODE_MAX_LENGTH}
+            aria-describedby={codeHintId}
+            className={codeTextareaClass}
+            style={{ tabSize: 4 }}
+          />
+        </Field>
+      ) : null}
 
       {explanationBefore.map((field) => (
         <Field key={field.name} id={field.name} label={field.label}>

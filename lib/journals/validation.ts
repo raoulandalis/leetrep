@@ -1,8 +1,16 @@
-import type { JournalInput } from "@/lib/journals/types";
-import { isComplexity } from "@/lib/journals/types";
-import type { ActionResult } from "@/lib/problems/types";
+import type { ActionResult } from "../problems/types.ts";
+import type { JournalInput } from "./types.ts";
+import { isComplexity } from "./types.ts";
+
+export const SOLUTION_CODE_MAX_LENGTH = 32_000;
 
 export const JOURNAL_FIELDS = [
+  {
+    name: "solution_code",
+    label: "My Solution",
+    kind: "code",
+    placeholder: "Paste the code you submitted.",
+  },
   {
     name: "approach",
     label: "My Approach",
@@ -58,6 +66,10 @@ function parseComplexity(raw: string): string | null | false {
   return isComplexity(trimmed) ? trimmed : false;
 }
 
+function emptyCodeToNull(raw: string): string | null {
+  return raw.trim() === "" ? null : raw;
+}
+
 export function parseJournalForm(
   formData: FormData
 ):
@@ -82,6 +94,14 @@ export function parseJournalForm(
     };
   }
 
+  const solution_code_raw = String(formData.get("solution_code") ?? "");
+  if (solution_code_raw.length > SOLUTION_CODE_MAX_LENGTH) {
+    return {
+      ok: false,
+      error: "Solution code is too long. Keep it under 32,000 characters.",
+    };
+  }
+
   const value: JournalInput = {
     approach: emptyToNull(String(formData.get("approach") ?? "")),
     key_insight: emptyToNull(String(formData.get("key_insight") ?? "")),
@@ -92,6 +112,7 @@ export function parseJournalForm(
     additional_notes: emptyToNull(
       String(formData.get("additional_notes") ?? "")
     ),
+    solution_code: emptyCodeToNull(solution_code_raw),
   };
 
   return { ok: true, problemId, value };
