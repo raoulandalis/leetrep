@@ -1,6 +1,22 @@
 "use client";
 
 import { useId, useState } from "react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  LabelList,
+  Tooltip,
+  XAxis,
+} from "recharts";
+import { ChartTooltip } from "@/components/progress/chart-tooltip";
+import { ClientChart } from "@/components/progress/client-chart";
+import {
+  CHART_LANE,
+  CHART_MIST,
+  CHART_RAIL,
+  CHART_SEAM,
+} from "@/lib/progress/chart-colors";
 import { cn } from "@/lib/utils";
 import type { HistoryRange, ProgressHistory } from "@/lib/progress/types";
 
@@ -10,18 +26,31 @@ const RANGES: Array<{ id: HistoryRange; label: string }> = [
   { id: "quarter", label: "3 months" },
 ];
 
-type Bar = {
+const tickStyle = {
+  fill: CHART_MIST,
+  fontSize: 11,
+  fontFamily: "Barlow Condensed, ui-sans-serif, sans-serif",
+  fontWeight: 700,
+};
+
+const labelStyle = {
+  fill: CHART_RAIL,
+  fontSize: 11,
+  fontFamily: "Barlow Condensed, ui-sans-serif, sans-serif",
+  fontWeight: 700,
+};
+
+type BarPoint = {
   key: string;
   count: number;
-  ariaLabel: string;
-  tick?: string;
+  tick: string;
+  tooltip: string;
 };
 
 export function ProgressHistory({ history }: { history: ProgressHistory }) {
   const [range, setRange] = useState<HistoryRange>("quarter");
   const labelId = useId();
   const { bars, startLabel, endLabel } = barsForRange(history, range);
-  const max = Math.max(1, ...bars.map((bar) => bar.count));
   const showTicks = bars.some((bar) => bar.tick);
 
   return (
@@ -62,35 +91,40 @@ export function ProgressHistory({ history }: { history: ProgressHistory }) {
       </div>
 
       <div className="border border-steel-seam bg-lane-board px-4 py-5 sm:px-5">
-        <ul className="flex h-44 items-stretch gap-1.5 sm:gap-2">
-          {bars.map((bar) => {
-            const heightPct =
-              bar.count === 0 ? 0 : Math.max(8, (bar.count / max) * 100);
-
-            return (
-              <li key={bar.key} className="flex min-w-0 flex-1 flex-col">
-                <span className="mb-2 text-center font-display text-xs font-bold tracking-[0.08em] text-rail">
-                  {bar.count}
-                </span>
-                <div className="flex min-h-0 flex-1 items-end">
-                  <div
-                    role="img"
-                    aria-label={bar.ariaLabel}
-                    className="w-full bg-lane"
-                    style={{
-                      height: bar.count === 0 ? 2 : `${heightPct}%`,
-                    }}
-                  />
-                </div>
-                {showTicks ? (
-                  <span className="mt-2 text-center font-display text-xs font-bold tracking-[0.08em] text-track-mist uppercase">
-                    {bar.tick}
-                  </span>
-                ) : null}
-              </li>
-            );
-          })}
-        </ul>
+        <ClientChart className="w-full" height={176}>
+          <BarChart
+            data={bars}
+            margin={{ top: 24, right: 4, left: 4, bottom: showTicks ? 4 : 0 }}
+            barCategoryGap="18%"
+          >
+            <CartesianGrid
+              vertical={false}
+              stroke={CHART_SEAM}
+              strokeDasharray="0"
+            />
+            <XAxis
+              dataKey="tick"
+              tick={showTicks ? tickStyle : false}
+              axisLine={false}
+              tickLine={false}
+              interval={0}
+            />
+            <Tooltip
+              content={ChartTooltip}
+              cursor={{ fill: "rgba(54, 217, 160, 0.08)" }}
+            />
+            <Bar
+              dataKey="count"
+              fill={CHART_LANE}
+              radius={0}
+              maxBarSize={40}
+              minPointSize={2}
+              isAnimationActive={false}
+            >
+              <LabelList dataKey="count" position="top" style={labelStyle} />
+            </Bar>
+          </BarChart>
+        </ClientChart>
         <div className="mt-3 flex justify-between gap-2">
           <p className="font-display text-xs font-bold tracking-[0.16em] text-track-mist uppercase">
             {startLabel}
@@ -107,13 +141,13 @@ export function ProgressHistory({ history }: { history: ProgressHistory }) {
 function barsForRange(
   history: ProgressHistory,
   range: HistoryRange
-): { bars: Bar[]; startLabel: string; endLabel: string } {
+): { bars: BarPoint[]; startLabel: string; endLabel: string } {
   if (range === "week") {
     const bars = history.week.map((bucket) => ({
       key: bucket.day,
       count: bucket.count,
-      ariaLabel: `${formatWeekday(bucket.day)} ${formatDate(bucket.day)}: ${repsPhrase(bucket.count)}`,
       tick: formatWeekday(bucket.day),
+      tooltip: `${formatWeekday(bucket.day)} ${formatDate(bucket.day)}: ${repsPhrase(bucket.count)}`,
     }));
     const first = history.week[0];
     const last = history.week[history.week.length - 1];
@@ -128,7 +162,8 @@ function barsForRange(
   const bars = weeks.map((bucket) => ({
     key: bucket.weekStart,
     count: bucket.count,
-    ariaLabel: `Week of ${formatDate(bucket.weekStart)}: ${repsPhrase(bucket.count)}`,
+    tick: "",
+    tooltip: `Week of ${formatDate(bucket.weekStart)}: ${repsPhrase(bucket.count)}`,
   }));
   const first = weeks[0];
   const last = weeks[weeks.length - 1];
