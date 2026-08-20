@@ -5,14 +5,18 @@ import type { Journal } from "@/lib/journals/types";
 import { JOURNAL_FIELDS } from "@/lib/journals/validation";
 import { journalHasContent } from "@/lib/reviews/rep";
 
+type JournalFieldName = (typeof JOURNAL_FIELDS)[number]["name"];
+
 export function JournalReveal({
   journal,
   problemId,
+  fields,
 }: {
   journal: Journal | null;
   problemId: string;
+  fields?: readonly JournalFieldName[];
 }) {
-  if (!journalHasContent(journal)) {
+  if (!fields && !journalHasContent(journal)) {
     return (
       <div className="flex flex-col gap-3">
         <p className="text-sm leading-relaxed text-track-mist">
@@ -28,9 +32,13 @@ export function JournalReveal({
     );
   }
 
+  const visibleFields = fields
+    ? JOURNAL_FIELDS.filter((field) => fields.includes(field.name))
+    : JOURNAL_FIELDS;
+
   return (
     <dl className="flex flex-col gap-5">
-      {JOURNAL_FIELDS.map((field) => {
+      {visibleFields.map((field) => {
         const value = journal?.[field.name]?.trim();
         if (!value) {
           return null;

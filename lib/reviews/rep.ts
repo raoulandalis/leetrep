@@ -17,8 +17,12 @@ export function canStartRep(status: ReviewStatus): boolean {
   return status === "due" || status === "overdue";
 }
 
+export function fieldHasContent(value: string | null | undefined): boolean {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
 export function canRevealRecall(text: string): boolean {
-  return text.trim().length > 0;
+  return fieldHasContent(text);
 }
 
 export function journalHasContent(journal: JournalNotes | null): boolean {
@@ -26,8 +30,5 @@ export function journalHasContent(journal: JournalNotes | null): boolean {
     return false;
   }
 
-  return JOURNAL_NOTE_KEYS.some((key) => {
-    const value = journal[key];
-    return typeof value === "string" && value.trim().length > 0;
-  });
+  return JOURNAL_NOTE_KEYS.some((key) => fieldHasContent(journal[key]));
 }

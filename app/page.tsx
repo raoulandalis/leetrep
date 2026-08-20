@@ -173,7 +173,7 @@ function RepTypesPreview() {
           Explain first
         </p>
         <p className="mt-1.5 text-sm leading-snug text-rail/65">
-          Write the approach from memory. Your journal unlocks after.
+          Answer each journal prompt from memory. That section unlocks after.
         </p>
       </div>
       <div className="border border-rail/15 bg-lane-pit/80 p-4">

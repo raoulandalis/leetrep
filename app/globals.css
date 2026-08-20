@@ -161,9 +161,25 @@
   animation: landing-stagger 650ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+.recall-unlock {
+  animation: recall-unlock 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes recall-unlock {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .landing-rise,
-  .landing-stagger {
+  .landing-stagger,
+  .recall-unlock {
     animation: none;
   }
 }
