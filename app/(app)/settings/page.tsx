@@ -1,5 +1,7 @@
 import { ProfileForm } from "@/components/profiles/profile-form";
 import { ErrorState } from "@/components/app/page-states";
+import { OllamaStatus } from "@/components/dev/ollama-status";
+import { isOllamaEnabled } from "@/lib/ollama/config";
 import { getProfile } from "@/lib/profiles/queries";
 import { createClient } from "@/lib/supabase/server";
 
@@ -31,6 +33,15 @@ export default async function SettingsPage() {
           />
         </section>
       )}
+
+      {isOllamaEnabled() ? (
+        <section className="w-full max-w-xl border border-steel-seam bg-rail p-6 text-asphalt sm:p-8">
+          <h2 className="font-display mb-6 text-xl font-extrabold tracking-tight text-asphalt uppercase">
+            Local model
+          </h2>
+          <OllamaStatus />
+        </section>
+      ) : null}
     </div>
   );
 }
