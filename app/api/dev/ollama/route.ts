@@ -71,6 +71,7 @@ function readString(body: unknown, key: string): string {
     return "";
   }
 
-  const value = body[key as keyof typeof body];
+  const record = body as Record<string, unknown>;
+  const value = record[key];
   return typeof value === "string" ? value.trim() : "";
 }
