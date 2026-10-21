@@ -4,6 +4,7 @@ import type { Journal } from "../journals/types.ts";
 import {
   canCommitComplexity,
   fieldHasContent,
+  openingRecallLine,
   recallCodaFields,
   recallPromptSteps,
 } from "./recall.ts";
@@ -46,6 +47,15 @@ describe("fieldHasContent", () => {
     assert.equal(fieldHasContent("   \n\t"), false);
     assert.equal(fieldHasContent(null), false);
     assert.equal(fieldHasContent(undefined), false);
+  });
+});
+
+describe("openingRecallLine", () => {
+  it("greets with the problem name and the first prompt", () => {
+    assert.equal(
+      openingRecallLine("Two Sum", "Walk through how you would solve this."),
+      "Hi! Let's start your recall for Two Sum, can you walk through how you would solve this?"
+    );
   });
 });
 

@@ -86,6 +86,16 @@ export function recallPromptSteps(journal: JournalNotes): RecallPromptStep[] {
   return steps;
 }
 
+export function openingRecallLine(problemTitle: string, prompt: string): string {
+  const title = problemTitle.trim() || "this problem";
+  const question = prompt.trim().replace(/[.?!]+$/, "");
+  const continued = question
+    ? question.charAt(0).toLowerCase() + question.slice(1)
+    : "tell me what you remember";
+
+  return `Hi! Let's start your recall for ${title}, can you ${continued}?`;
+}
+
 export function recallCodaFields(journal: JournalNotes): RecallCodaField[] {
   return CODA_FIELDS.filter((field) => fieldHasContent(journal[field]));
 }

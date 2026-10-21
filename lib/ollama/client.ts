@@ -1,4 +1,5 @@
 import { ollamaHost, ollamaModel } from "./config.ts";
+import { toolNameFromText } from "./recall-turn.ts";
 
 export class OllamaUnavailableError extends Error {
   constructor(message = "Ollama is unavailable.") {
@@ -43,14 +44,42 @@ type ChatResponse = {
 
 const MAX_ROUNDS = 3;
 
+export type OllamaHistoryTurn = {
+  role: "system" | "user" | "assistant";
+  content: string;
+};
+
 export async function askOllama(
   message: string,
   options?: {
     tools?: OllamaTool[];
     runTool?: (name: string) => Promise<string>;
+    system?: string;
+    history?: OllamaHistoryTurn[];
   }
 ): Promise<string> {
-  const messages: ChatMessage[] = [{ role: "user", content: message }];
+  const messages: ChatMessage[] = [];
+  const system = options?.system?.trim();
+  if (system) {
+    messages.push({ role: "system", content: system });
+  }
+
+  for (const turn of options?.history ?? []) {
+    const content = turn.content.trim();
+    if (!content) {
+      continue;
+    }
+    if (
+      turn.role !== "system" &&
+      turn.role !== "user" &&
+      turn.role !== "assistant"
+    ) {
+      continue;
+    }
+    messages.push({ role: turn.role, content });
+  }
+
+  messages.push({ role: "user", content: message });
   let lastContent = "";
 
   for (let round = 0; round < MAX_ROUNDS; round += 1) {
@@ -59,6 +88,30 @@ export async function askOllama(
       typeof data.message?.content === "string" ? data.message.content : "";
     lastContent = content;
     const toolCalls = toolCallsFrom(data.message);
+    const writtenTool =
+      toolCalls.length === 0 ? toolNameFromText(content) : null;
+
+    if (options?.runTool && writtenTool) {
+      let result: string;
+      try {
+        result = await options.runTool(writtenTool);
+      } catch {
+        result = JSON.stringify({ error: "The tool failed." });
+      }
+
+      if (round === MAX_ROUNDS - 1) {
+        lastContent = "";
+        break;
+      }
+
+      messages.push({ role: "assistant", content: "" });
+      messages.push({
+        role: "tool",
+        content: result,
+        tool_name: writtenTool,
+      });
+      continue;
+    }
 
     if (!options?.runTool || toolCalls.length === 0) {
       if (content.trim() === "") {
