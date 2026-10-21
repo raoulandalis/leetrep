@@ -1,5 +1,7 @@
 import { isOllamaEnabled } from "@/lib/ollama/config";
 
+const SIGN_IN_ERROR = "You need to sign in to view this problem.";
+
 export async function GET() {
   if (!isOllamaEnabled()) {
     return Response.json({ error: "Not found." }, { status: 404 });
@@ -21,24 +23,39 @@ export async function POST(request: Request) {
     return Response.json({ error: "Invalid JSON." }, { status: 400 });
   }
 
-  const message =
-    typeof body === "object" &&
-    body !== null &&
-    "message" in body &&
-    typeof body.message === "string"
-      ? body.message.trim()
-      : "";
-
+  const message = readString(body, "message");
   if (!message) {
     return Response.json({ error: "Missing message." }, { status: 400 });
   }
 
+  const problemId = readString(body, "problemId");
   const { askOllama, OllamaUnavailableError } = await import(
     "@/lib/ollama/client"
   );
 
   try {
-    const reply = await askOllama(message);
+    if (!problemId) {
+      const reply = await askOllama(message);
+      return Response.json({ message: reply });
+    }
+
+    const { getProblem } = await import("@/lib/problems/queries");
+    const { problem, error } = await getProblem(problemId);
+    if (error === SIGN_IN_ERROR) {
+      return Response.json({ error }, { status: 401 });
+    }
+    if (error) {
+      return Response.json({ error }, { status: 400 });
+    }
+    if (!problem) {
+      return Response.json({ error: "Not found." }, { status: 404 });
+    }
+
+    const { problemTools, runProblemTool } = await import("@/lib/ollama/tools");
+    const reply = await askOllama(message, {
+      tools: problemTools,
+      runTool: (name) => runProblemTool(name, problemId),
+    });
     return Response.json({ message: reply });
   } catch (error) {
     if (error instanceof OllamaUnavailableError) {
@@ -47,4 +64,13 @@ export async function POST(request: Request) {
 
     throw error;
   }
+}
+
+function readString(body: unknown, key: string): string {
+  if (typeof body !== "object" || body === null || !(key in body)) {
+    return "";
+  }
+
+  const value = body[key as keyof typeof body];
+  return typeof value === "string" ? value.trim() : "";
 }

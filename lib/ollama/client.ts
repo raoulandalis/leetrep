@@ -1,4 +1,4 @@
-import { ollamaHost, ollamaModel } from "./config";
+import { ollamaHost, ollamaModel } from "./config.ts";
 
 export class OllamaUnavailableError extends Error {
   constructor(message = "Ollama is unavailable.") {
@@ -7,13 +7,128 @@ export class OllamaUnavailableError extends Error {
   }
 }
 
-type ChatResponse = {
-  message?: {
-    content?: unknown;
+export type OllamaTool = {
+  type: "function";
+  function: {
+    name: string;
+    description: string;
+    parameters: {
+      type: "object";
+      properties: Record<string, never>;
+      required: string[];
+    };
   };
 };
 
-export async function askOllama(message: string): Promise<string> {
+type ToolCall = {
+  function: {
+    name: string;
+  };
+};
+
+type ChatMessage = {
+  role: string;
+  content: string;
+  tool_calls?: unknown;
+  tool_name?: string;
+};
+
+type ChatResponse = {
+  message?: {
+    role?: string;
+    content?: unknown;
+    tool_calls?: unknown;
+  };
+};
+
+const MAX_ROUNDS = 3;
+
+export async function askOllama(
+  message: string,
+  options?: {
+    tools?: OllamaTool[];
+    runTool?: (name: string) => Promise<string>;
+  }
+): Promise<string> {
+  const messages: ChatMessage[] = [{ role: "user", content: message }];
+  let lastContent = "";
+
+  for (let round = 0; round < MAX_ROUNDS; round += 1) {
+    const data = await postChat(messages, options?.tools);
+    const content =
+      typeof data.message?.content === "string" ? data.message.content : "";
+    lastContent = content;
+    const toolCalls = toolCallsFrom(data.message);
+
+    if (!options?.runTool || toolCalls.length === 0) {
+      if (content.trim() === "") {
+        throw new OllamaUnavailableError();
+      }
+      return content;
+    }
+
+    if (round === MAX_ROUNDS - 1) {
+      break;
+    }
+
+    messages.push({
+      role: "assistant",
+      content,
+      tool_calls: data.message?.tool_calls,
+    });
+
+    for (const call of toolCalls) {
+      let result: string;
+      try {
+        result = await options.runTool(call.function.name);
+      } catch {
+        result = JSON.stringify({ error: "The tool failed." });
+      }
+
+      messages.push({
+        role: "tool",
+        content: result,
+        tool_name: call.function.name,
+      });
+    }
+  }
+
+  if (lastContent.trim() !== "") {
+    return lastContent;
+  }
+
+  return "The model did not return an answer.";
+}
+
+function toolCallsFrom(message: ChatResponse["message"]): ToolCall[] {
+  if (!message || !Array.isArray(message.tool_calls)) {
+    return [];
+  }
+
+  return message.tool_calls.flatMap((call) => {
+    if (typeof call !== "object" || call === null || !("function" in call)) {
+      return [];
+    }
+
+    const fn = call.function;
+    if (
+      typeof fn !== "object" ||
+      fn === null ||
+      !("name" in fn) ||
+      typeof fn.name !== "string" ||
+      fn.name.trim() === ""
+    ) {
+      return [];
+    }
+
+    return [{ function: { name: fn.name } }];
+  });
+}
+
+async function postChat(
+  messages: ChatMessage[],
+  tools: OllamaTool[] | undefined
+): Promise<ChatResponse> {
   let response: Response;
 
   try {
@@ -22,8 +137,9 @@ export async function askOllama(message: string): Promise<string> {
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
         model: ollamaModel(),
-        messages: [{ role: "user", content: message }],
+        messages,
         stream: false,
+        ...(tools && tools.length > 0 ? { tools } : {}),
       }),
     });
   } catch {
@@ -34,17 +150,9 @@ export async function askOllama(message: string): Promise<string> {
     throw new OllamaUnavailableError();
   }
 
-  let data: ChatResponse;
   try {
-    data = (await response.json()) as ChatResponse;
+    return (await response.json()) as ChatResponse;
   } catch {
     throw new OllamaUnavailableError();
   }
-
-  const content = data.message?.content;
-  if (typeof content !== "string" || content.trim() === "") {
-    throw new OllamaUnavailableError();
-  }
-
-  return content;
 }
