@@ -8,6 +8,7 @@ import { RecallRep } from "@/components/reviews/recall-rep";
 import { ResolveRep } from "@/components/reviews/resolve-rep";
 import { ReviewTypeChip } from "@/components/reviews/review-type-chip";
 import { formatCompletedDate } from "@/lib/problems/validation";
+import { isOllamaEnabled } from "@/lib/ollama/config";
 import { getReviewRep } from "@/lib/reviews/queries";
 import { canStartRep } from "@/lib/reviews/rep";
 import { taskStatus, todayYmd } from "@/lib/reviews/schedule";
@@ -97,7 +98,9 @@ export default async function ReviewRepPage({
           taskId={rep.id}
           problemId={rep.problem_id}
           journal={rep.journal}
+          problemTitle={title}
           currentConfidence={rep.problems?.confidence ?? null}
+          ollamaEnabled={isOllamaEnabled()}
         />
       ) : (
         <ResolveRep

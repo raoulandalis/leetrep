@@ -15,6 +15,22 @@ import {
 export const LOAD_PROBLEMS = "load_problems";
 export const LOAD_SCRAPED_PROBLEM = "load_scraped_problem";
 
+export const scrapedProblemTools: OllamaTool[] = [
+  {
+    type: "function",
+    function: {
+      name: LOAD_SCRAPED_PROBLEM,
+      description:
+        "Return this problem's statement, examples, and constraints. Use it when the user asks what the problem says, asks for it explained another way, or asks how to solve it. This returns the question only.",
+      parameters: {
+        type: "object",
+        properties: {},
+        required: [],
+      },
+    },
+  },
+];
+
 export const problemTools: OllamaTool[] = [
   {
     type: "function",
@@ -29,19 +45,7 @@ export const problemTools: OllamaTool[] = [
       },
     },
   },
-  {
-    type: "function",
-    function: {
-      name: LOAD_SCRAPED_PROBLEM,
-      description:
-        "Return this problem's statement, examples, and constraints. Use it when the user asks what the problem says, asks for it explained another way, or asks how to solve it. This returns the question only.",
-      parameters: {
-        type: "object",
-        properties: {},
-        required: [],
-      },
-    },
-  },
+  scrapedProblemTools[0],
 ];
 
 export async function loadProblems(problemId: string): Promise<string> {

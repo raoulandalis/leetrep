@@ -21,6 +21,7 @@ import {
 } from "@/lib/reviews/recall";
 import { canRevealRecall, journalHasContent } from "@/lib/reviews/rep";
 import { cn } from "@/lib/utils";
+import { RecallChat } from "@/components/reviews/recall-chat";
 
 const textareaClass =
   "min-h-40 w-full resize-y rounded-none border border-steel-seam bg-lane-pit px-3 py-3 text-sm leading-relaxed text-rail outline-none transition-[border-color,box-shadow] placeholder:text-track-mist focus-visible:border-rail focus-visible:ring-2 focus-visible:ring-lane/60";
@@ -39,12 +40,16 @@ export function RecallRep({
   taskId,
   problemId,
   journal,
+  problemTitle,
   currentConfidence,
+  ollamaEnabled = false,
 }: {
   taskId: string;
   problemId: string;
   journal: Journal | null;
+  problemTitle: string;
   currentConfidence: Confidence | null;
+  ollamaEnabled?: boolean;
 }) {
   if (!journal || !journalHasContent(journal)) {
     return (
@@ -54,6 +59,18 @@ export function RecallRep({
         </p>
         <JournalReveal journal={journal} problemId={problemId} />
       </div>
+    );
+  }
+
+  if (ollamaEnabled && recallPromptSteps(journal).length > 0) {
+    return (
+      <RecallChat
+        taskId={taskId}
+        problemId={problemId}
+        journal={journal}
+        problemTitle={problemTitle}
+        currentConfidence={currentConfidence}
+      />
     );
   }
 
