@@ -56,6 +56,7 @@ export async function askOllama(
     runTool?: (name: string) => Promise<string>;
     system?: string;
     history?: OllamaHistoryTurn[];
+    format?: "json";
   }
 ): Promise<string> {
   const messages: ChatMessage[] = [];
@@ -83,7 +84,7 @@ export async function askOllama(
   let lastContent = "";
 
   for (let round = 0; round < MAX_ROUNDS; round += 1) {
-    const data = await postChat(messages, options?.tools);
+    const data = await postChat(messages, options?.tools, options?.format);
     const content =
       typeof data.message?.content === "string" ? data.message.content : "";
     lastContent = content;
@@ -180,7 +181,8 @@ function toolCallsFrom(message: ChatResponse["message"]): ToolCall[] {
 
 async function postChat(
   messages: ChatMessage[],
-  tools: OllamaTool[] | undefined
+  tools: OllamaTool[] | undefined,
+  format?: "json"
 ): Promise<ChatResponse> {
   let response: Response;
 
@@ -192,6 +194,7 @@ async function postChat(
         model: ollamaModel(),
         messages,
         stream: false,
+        ...(format ? { format } : {}),
         ...(tools && tools.length > 0 ? { tools } : {}),
       }),
     });

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CompleteRepForm } from "@/components/reviews/complete-rep-form";
 import { JournalReveal } from "@/components/reviews/journal-reveal";
 import type { Journal } from "@/lib/journals/types";
@@ -66,6 +66,16 @@ export function RecallChat({
   const [pending, setPending] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const threadRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const thread = threadRef.current;
+    if (!thread) {
+      return;
+    }
+
+    thread.scrollTop = thread.scrollHeight;
+  }, [lines, pending]);
 
   async function send() {
     const text = draft.trim();
@@ -135,57 +145,107 @@ export function RecallChat({
 
   return (
     <div className="flex flex-col gap-8">
-      <p className="font-display text-xs font-bold tracking-[0.16em] text-track-mist uppercase">
-        {Math.min(stepIndex + 1, steps.length)} of {steps.length}
-      </p>
-      <div className="flex flex-col gap-4">
-        {lines.map((line, index) =>
-          line.kind === "comparison" ? (
-            <div
-              key={`comparison-${index}`}
-              className="grid gap-6 md:grid-cols-2 md:gap-8"
-            >
-              <section className="flex min-w-0 flex-col gap-3 border border-steel-seam bg-lane-pit p-5 sm:p-6">
-                <h2 className="font-display text-lg font-extrabold tracking-tight text-rail uppercase">
-                  Your Recall
-                </h2>
-                <p className="text-sm leading-relaxed whitespace-pre-wrap text-rail">
-                  {line.answer}
-                </p>
-              </section>
-              <section className="flex min-w-0 flex-col gap-3 border border-steel-seam bg-lane-board p-5 sm:p-6">
-                <h2 className="font-display text-lg font-extrabold tracking-tight text-rail uppercase">
-                  Your Original Notes
-                </h2>
-                <JournalReveal
-                  journal={journal}
-                  problemId={problemId}
-                  fields={
-                    line.step.kind === "text" ? [line.step.field] : line.step.fields
-                  }
-                />
-              </section>
-            </div>
-          ) : (
+      <div className="flex h-[min(36rem,calc(100dvh-8rem))] flex-col border border-steel-seam bg-lane-board">
+        <p className="shrink-0 border-b border-steel-seam px-4 py-3 font-display text-xs font-bold tracking-[0.16em] text-track-mist uppercase">
+          {Math.min(stepIndex + 1, steps.length)} of {steps.length}
+        </p>
+        <div
+          ref={threadRef}
+          tabIndex={0}
+          aria-label="Recall conversation"
+          className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-4 sm:p-5"
+        >
+          {lines.map((line, index) =>
+            line.kind === "comparison" ? (
+              <div
+                key={`comparison-${index}`}
+                className="grid gap-6 md:grid-cols-2 md:gap-8"
+              >
+                <section className="flex min-w-0 flex-col gap-3 border border-steel-seam bg-lane-pit p-5 sm:p-6">
+                  <h2 className="font-display text-lg font-extrabold tracking-tight text-rail uppercase">
+                    Your Recall
+                  </h2>
+                  <p className="text-sm leading-relaxed whitespace-pre-wrap text-rail">
+                    {line.answer}
+                  </p>
+                </section>
+                <section className="flex min-w-0 flex-col gap-3 border border-steel-seam bg-lane-pit p-5 sm:p-6">
+                  <h2 className="font-display text-lg font-extrabold tracking-tight text-rail uppercase">
+                    Your Original Notes
+                  </h2>
+                  <JournalReveal
+                    journal={journal}
+                    problemId={problemId}
+                    fields={
+                      line.step.kind === "text" ? [line.step.field] : line.step.fields
+                    }
+                  />
+                </section>
+              </div>
+            ) : (
+              <p
+                key={`${line.role}-${index}`}
+                className={
+                  line.role === "user"
+                    ? "max-w-xl self-end border border-steel-seam bg-lane-pit px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap text-rail"
+                    : "max-w-xl border border-steel-seam bg-lane-pit px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap text-rail"
+                }
+              >
+                {line.content}
+              </p>
+            )
+          )}
+          {pending ? (
             <p
-              key={`${line.role}-${index}`}
-              className={
-                line.role === "user"
-                  ? "max-w-xl self-end border border-steel-seam bg-lane-pit px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap text-rail"
-                  : "max-w-xl border border-steel-seam bg-lane-board px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap text-rail"
-              }
+              className="flex w-fit items-center border border-steel-seam bg-lane-pit px-4 py-3"
+              role="status"
+              aria-label="The coach is replying"
             >
-              {line.content}
+              <span className="coach-ellipsis text-base" aria-hidden="true">
+                <span>.</span>
+                <span>.</span>
+                <span>.</span>
+              </span>
             </p>
-          )
+          ) : null}
+        </div>
+
+        {error ? (
+          <p className="shrink-0 px-4 pb-4 text-sm text-destructive sm:px-5" role="alert">
+            {error}
+          </p>
+        ) : null}
+
+        {done ? null : (
+          <form
+            className="flex shrink-0 flex-col gap-4 border-t border-steel-seam p-4 sm:p-5"
+            onSubmit={(event) => {
+              event.preventDefault();
+              void send();
+            }}
+          >
+            <label className="flex flex-col gap-2">
+              <span className="sr-only">Message the coach</span>
+              <textarea
+                value={draft}
+                onChange={(event) => setDraft(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" && !event.shiftKey) {
+                    event.preventDefault();
+                    void send();
+                  }
+                }}
+                placeholder="Answer, or ask about the problem."
+                className={composerClass}
+                disabled={pending}
+              />
+            </label>
+            <button type="submit" className={sendClass} disabled={pending || draft.trim() === ""}>
+              Send
+            </button>
+          </form>
         )}
       </div>
-
-      {error ? (
-        <p className="text-sm text-destructive" role="alert">
-          {error}
-        </p>
-      ) : null}
 
       {done ? (
         <div className="flex flex-col gap-8">
@@ -207,35 +267,7 @@ export function RecallChat({
             currentConfidence={currentConfidence}
           />
         </div>
-      ) : (
-        <form
-          className="flex flex-col gap-4"
-          onSubmit={(event) => {
-            event.preventDefault();
-            void send();
-          }}
-        >
-          <label className="flex flex-col gap-2">
-            <span className="sr-only">Message the coach</span>
-            <textarea
-              value={draft}
-              onChange={(event) => setDraft(event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter" && !event.shiftKey) {
-                  event.preventDefault();
-                  void send();
-                }
-              }}
-              placeholder="Answer, or ask about the problem."
-              className={composerClass}
-              disabled={pending}
-            />
-          </label>
-          <button type="submit" className={sendClass} disabled={pending || draft.trim() === ""}>
-            {pending ? "Thinking..." : "Send"}
-          </button>
-        </form>
-      )}
+      ) : null}
     </div>
   );
 }

@@ -100,6 +100,7 @@ export async function POST(request: Request) {
     let raw = await askOllama(message, {
       system: replySystem(lookedUp),
       history,
+      format: "json",
     });
 
     if (toolNameFromText(raw) || toolNameFromText(parseRecallTurn(raw).message)) {
@@ -109,6 +110,7 @@ export async function POST(request: Request) {
       raw = await askOllama(message, {
         system: replySystem(lookedUp),
         history,
+        format: "json",
       });
     }
 

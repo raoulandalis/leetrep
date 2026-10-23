@@ -165,6 +165,40 @@
   animation: recall-unlock 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+.coach-ellipsis {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 0.15rem;
+  height: 1rem;
+  color: var(--track-mist);
+  line-height: 1;
+}
+
+.coach-ellipsis span {
+  animation: coach-ellipsis 1.1s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+.coach-ellipsis span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.coach-ellipsis span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes coach-ellipsis {
+  0%,
+  70%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  35% {
+    opacity: 1;
+    transform: translateY(-0.15rem);
+  }
+}
+
 @keyframes recall-unlock {
   from {
     opacity: 0;
@@ -179,7 +213,9 @@
 @media (prefers-reduced-motion: reduce) {
   .landing-rise,
   .landing-stagger,
-  .recall-unlock {
+  .recall-unlock,
+  .coach-ellipsis span {
     animation: none;
+    opacity: 1;
   }
 }

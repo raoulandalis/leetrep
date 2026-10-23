@@ -45,21 +45,23 @@ describe("recallInstruction", () => {
 
     assert.match(instruction, /helpful teacher would say out loud/);
     assert.match(instruction, /Walk through how you would solve this/);
-    assert.match(instruction, /2-3 sentences/);
-    assert.match(instruction, /Reveal a solution only when they explicitly ask/);
+    assert.match(instruction, /two sentences/);
+    assert.match(instruction, /at most four sentences/);
     assert.match(instruction, /Do not write a tool call/);
     assert.equal(instruction.includes(JOURNAL_APPROACH), false);
   });
 
-  it("treats a walkthrough as an answer and a request as a question", () => {
+  it("advances a walkthrough, a give-up, or a request for what is next", () => {
     const instruction = recallInstruction("Walk through how you would solve this.");
 
     assert.match(instruction, /Decide from the user's latest message only/);
-    assert.match(instruction, /An incomplete answer still counts/);
-    assert.match(instruction, /A question asks you for the problem/);
-    assert.match(instruction, /Do not reuse an example/);
+    assert.match(instruction, /incomplete walkthrough still counts/);
+    assert.match(instruction, /ask what is next/);
+    assert.match(instruction, /Set advance to false only when they ask what the problem is/);
+    assert.match(instruction, /"advance":true/);
+    assert.match(instruction, /"advance":false/);
+    assert.equal(instruction.includes("two pointers"), false);
     assert.equal(instruction.includes("Good question"), false);
-    assert.equal(instruction.includes("array of numbers and a target"), false);
   });
 });
 
