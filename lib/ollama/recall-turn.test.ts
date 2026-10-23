@@ -50,6 +50,17 @@ describe("recallInstruction", () => {
     assert.match(instruction, /Do not write a tool call/);
     assert.equal(instruction.includes(JOURNAL_APPROACH), false);
   });
+
+  it("treats a walkthrough as an answer and a request as a question", () => {
+    const instruction = recallInstruction("Walk through how you would solve this.");
+
+    assert.match(instruction, /Decide from the user's latest message only/);
+    assert.match(instruction, /An incomplete answer still counts/);
+    assert.match(instruction, /A question asks you for the problem/);
+    assert.match(instruction, /Do not reuse an example/);
+    assert.equal(instruction.includes("Good question"), false);
+    assert.equal(instruction.includes("array of numbers and a target"), false);
+  });
 });
 
 describe("toolNameFromText", () => {
